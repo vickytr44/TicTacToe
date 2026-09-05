@@ -42,22 +42,22 @@
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T015 [P] [US1] Unit tests for win detection logic explicitly asserting winning-cell coordinates for row, column, and diagonal wins in `tests/backend/Domain.UnitTests/GameTests.cs`
-- [ ] T016 [P] [US1] Integration tests for GET `/api/games/{id}`, POST `/api/games`, and POST `/api/games/{id}/moves` (explicitly testing rejection of out-of-bounds, occupied cell, wrong player, and completed game moves) in `tests/backend/Api.IntegrationTests/GameEndpointsTests.cs`
-- [ ] T016a [P] [US1] Integration test verifying complete API response contract (id, board, currentPlayer, gameMode, status, winner, winningCells, moves) in `tests/backend/Api.IntegrationTests/GameEndpointsTests.cs`
-- [ ] T017 [P] [US1] Component tests for `BoardComponent` click interactions in `tests/frontend/BoardComponent.spec.ts`
-- [ ] T017a [P] [US1] Component tests for FR-024 error handling (dismissible banner, keep valid state, no optimistic mutation) in `tests/frontend/ErrorBannerComponent.spec.ts`
+- [X] T015 [P] [US1] Unit tests for win detection logic explicitly asserting winning-cell coordinates for row, column, and diagonal wins in `tests/backend/Domain.UnitTests/GameTests.cs`
+- [X] T016 [P] [US1] Integration tests for GET `/api/games/{id}`, POST `/api/games`, and POST `/api/games/{id}/moves` (explicitly testing rejection of out-of-bounds, occupied cell, wrong player, and completed game moves) in `tests/backend/Api.IntegrationTests/GameEndpointsTests.cs`
+- [X] T016a [P] [US1] Integration test verifying complete API response contract (id, board, currentPlayer, gameMode, status, winner, winningCells, moves) in `tests/backend/Api.IntegrationTests/GameEndpointsTests.cs`
+- [X] T017 [P] [US1] Component tests for `BoardComponent` click interactions in `tests/frontend/BoardComponent.spec.ts`
+- [X] T017a [P] [US1] Component tests for FR-024 error handling (dismissible banner, keep valid state, no optimistic mutation) in `tests/frontend/ErrorBannerComponent.spec.ts`
 
 ### Implementation for User Story 1
 
-- [ ] T018 [P] [US1] Implement `Game` win detection and move validation logic in `src/backend/Domain/Entities/Game.cs`
-- [ ] T019 [US1] Implement POST `/api/games` minimal API endpoint in `src/backend/Api/Endpoints/GameEndpoints.cs`
-- [ ] T019a [US1] Implement GET `/api/games/{id}` endpoint in `src/backend/Api/Endpoints/GameEndpoints.cs`
-- [ ] T020 [US1] Implement POST `/api/games/{id}/moves` endpoint in `src/backend/Api/Endpoints/GameEndpoints.cs`
-- [ ] T021 [US1] Implement `GameStore` methods `createGame` and `makeMove` with an `isPending` state that disables board clicks while API requests are in flight in `src/frontend/src/app/features/game/state/game.store.ts`
-- [ ] T022 [P] [US1] Create `BoardComponent` and `CellComponent` in `src/frontend/src/app/features/game/components/`
-- [ ] T023 [US1] Create `GamePageComponent` (smart container) combining board and state in `src/frontend/src/app/features/game/containers/`
-- [ ] T023a [US1] Create `ErrorBannerComponent` and wire up HTTP error interceptor to display dismissible banner and prevent optimistic mutation in `src/frontend/src/app/features/game/components/`
+- [X] T018 [P] [US1] Implement `Game` win detection and move validation logic in `src/backend/Domain/Entities/Game.cs`
+- [X] T019 [US1] Implement POST `/api/games` minimal API endpoint in `src/backend/Api/Endpoints/GameEndpoints.cs`
+- [X] T019a [US1] Implement GET `/api/games/{id}` endpoint in `src/backend/Api/Endpoints/GameEndpoints.cs`
+- [X] T020 [US1] Implement POST `/api/games/{id}/moves` endpoint in `src/backend/Api/Endpoints/GameEndpoints.cs`
+- [X] T021 [US1] Implement `GameStore` methods `createGame` and `makeMove` with an `isPending` state that disables board clicks while API requests are in flight in `src/frontend/src/app/features/game/state/game.store.ts`
+- [X] T022 [P] [US1] Create `BoardComponent` and `CellComponent` in `src/frontend/src/app/features/game/components/`
+- [X] T023 [US1] Create `GamePageComponent` (smart container) combining board and state in `src/frontend/src/app/features/game/containers/`
+- [X] T023a [US1] Create `ErrorBannerComponent` and wire up HTTP error interceptor to display dismissible banner and prevent optimistic mutation in `src/frontend/src/app/features/game/components/`
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 

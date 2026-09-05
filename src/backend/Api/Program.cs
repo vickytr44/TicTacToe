@@ -1,5 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using TicTacToe.Api.Endpoints;
 using TicTacToe.Api.Middleware;
 using TicTacToe.Infrastructure;
+using TicTacToe.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,11 +22,19 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Ensure database is created
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<TicTacToeDbContext>();
+    db.Database.EnsureCreated();
+}
+
 // Middleware
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseCors();
 
 app.MapGet("/api/health", () => Results.Ok(new { status = "healthy" }));
+app.MapGameEndpoints();
 
 app.Run();
 

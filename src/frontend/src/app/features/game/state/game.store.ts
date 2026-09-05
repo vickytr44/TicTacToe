@@ -84,16 +84,48 @@ export const GameStore = signalStore(
         tap(() => patchState(store, { isLoading: true, error: null })),
         switchMap((mode = 'TwoPlayer') =>
           api.createGame({ mode }).pipe(
-            tap((game) => patchState(store, { game, isLoading: false })),
+            tap((game) => patchState(store, { game, isLoading: false, isPending: false })),
             catchError(() => {
               patchState(store, {
                 isLoading: false,
-                error: 'Failed to create game session. Please try again.'
+                isPending: false,
+                error: 'Something went wrong. Please try again.'
               });
               return of(null);
             })
           )
         )
+      )
+    ),
+    makeMove: rxMethod<{ row: number; column: number }>(
+      pipe(
+        tap(() => patchState(store, { isPending: true, error: null })),
+        switchMap(({ row, column }) => {
+          const game = store.game();
+          if (!game) {
+            patchState(store, { isPending: false });
+            return of(null);
+          }
+
+          const player = game.currentPlayer;
+          return api.makeMove(game.id, { player, row, column }).pipe(
+            tap((updatedGame) => {
+              patchState(store, { game: updatedGame, isPending: false, error: null });
+              if (updatedGame.status === 'Won' || updatedGame.status === 'Draw') {
+                api.getScoreboard().subscribe({
+                  next: (sb) => patchState(store, { scoreboard: sb }),
+                  error: () => {}
+                });
+              }
+            }),
+            catchError((err) => {
+              const errorMsg =
+                err?.error?.detail || err?.error?.title || 'Something went wrong. Please try again.';
+              patchState(store, { isPending: false, error: errorMsg });
+              return of(null);
+            })
+          );
+        })
       )
     ),
     resetScoreboard: rxMethod<void>(
