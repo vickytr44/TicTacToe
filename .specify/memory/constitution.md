@@ -1,10 +1,10 @@
 <!--
 Sync Impact Report
-- Version change: 1.1.0 → 1.2.0
+- Version change: 1.2.0 → 1.3.0
 - List of modified principles:
-  - II. Clean Architecture & Inward Dependency Flow (explicitly mandates repository interfaces in Domain layer and concrete implementations in Infrastructure layer)
+  - II. Clean Architecture & Inward Dependency Flow (mandates application services for use case orchestration, rich domain preservation, and thin HTTP endpoints)
 - Added sections:
-  - Repository Pattern & Direct DbContext Prohibition under Technology Stack & Architectural Constraints
+  - Application services and thin endpoints in Backend Architecture
 - Removed sections:
   - None
 - Follow-up TODOs:
@@ -26,12 +26,12 @@ Sync Impact Report
 
 ### II. Clean Architecture & Inward Dependency Flow
 - **Strict Inward Flow**: Architecture MUST adhere to inward dependency rules: `Domain` ◄ `Application` ◄ `Infrastructure` & `Api`.
-- **Domain Independence & Repository Contracts**: `src/backend/Domain/` MUST have zero external dependencies—no third-party packages, no EF Core, and no ASP.NET Core references. All aggregate repository contracts (e.g., `IGameRepository`, `IScoreboardRepository`) MUST reside in `Domain/Repositories/`.
-- **Application Contracts**: `src/backend/Application/` defines use case orchestration, workflow handlers, service contracts, and sealed DTOs, depending strictly on `Domain`.
+- **Domain Independence & Repository Contracts**: `src/backend/Domain/` MUST have zero external dependencies—no third-party packages, no EF Core, and no ASP.NET Core references. All aggregate repository contracts (e.g., `IGameRepository`, `IScoreboardRepository`) MUST reside in `Domain/Repositories/`. Entities remain rich domain models containing all game rules.
+- **Application Use Cases**: `src/backend/Application/` encapsulates use case orchestration in application services (`IGameService`, `GameService`), workflow handlers, and sealed DTOs, depending strictly on `Domain`. Application services coordinate repositories and invoke entity methods without duplicating or removing domain logic.
 - **Infrastructure & Persistence**: `src/backend/Infrastructure/` encapsulates SQLite EF Core persistence and provides concrete repository implementations (`GameRepository`, `ScoreboardRepository`) under `Infrastructure/Repositories/`.
-- **Api & Host**: `src/backend/Api/` encapsulates ASP.NET Core endpoints, middleware, and dependency injection wiring. Endpoints and controllers MUST NEVER inject `DbContext` directly; they MUST inject repository interfaces via primary constructors.
+- **Api & Thin Endpoints**: `src/backend/Api/` encapsulates ASP.NET Core endpoints, middleware, and dependency injection wiring. Endpoints and controllers MUST remain thin HTTP adapters; they MUST NOT inject `DbContext` or repositories directly, but MUST inject Application services (`IGameService`) via primary constructors.
 - **Frontend Layering**: Angular code MUST maintain clean directory boundaries: `core/` for singletons and HTTP, `features/` for feature slices, and `shared/` for reusable UI tokens and primitives.
-- *Rationale*: Protects enterprise business rules from technological volatility, external framework churn, and database implementation details, ensuring the domain drives persistence abstractions without being coupled to ORMs.
+- *Rationale*: Protects enterprise business rules from technological volatility, external framework churn, and database implementation details, ensuring the domain drives persistence abstractions without being coupled to ORMs, while use cases remain modular and decoupled from transport.
 
 ### III. Backend State Authority
 - **Single Source of Truth**: The ASP.NET Core backend is the sole authority for game session state, move validation, turn sequencing, win/draw detection, and persistence.
@@ -58,7 +58,8 @@ Sync Impact Report
 - **Backend Architecture**:
   - **Framework**: .NET 10 (`net10.0`), C#.
   - **Application Model**: ASP.NET Core Web API with RESTful conventions and OpenAPI / Swagger documentation.
-  - **Repository Pattern & Persistence**: Aggregate repository contracts MUST reside in `Domain/Repositories/` and concrete implementations in `Infrastructure/Repositories/`. Direct injection of `DbContext` into endpoints, controllers, or application services is strictly forbidden.
+  - **Application Services & Thin Endpoints**: All use case orchestration resides in Application services (`IGameService`). Endpoints delegate directly to Application services; direct injection of `DbContext` or repositories into endpoints is strictly forbidden.
+  - **Repository Pattern & Persistence**: Aggregate repository contracts MUST reside in `Domain/Repositories/` and concrete implementations in `Infrastructure/Repositories/`.
   - **Database Persistence**: SQLite via Entity Framework Core (`Microsoft.EntityFrameworkCore.Sqlite`) with managed migrations.
   - **Error Handling**: Global exception handling returning standard RFC 7807 Problem Details.
   - **Data Boundary**: Domain entities MUST NEVER be exposed directly in API request or response models.
@@ -90,4 +91,4 @@ Sync Impact Report
   - **PATCH**: Clarifications, wording refinements, and non-semantic corrections.
 - **Runtime Guidance**: Operational implementation guidelines are maintained in [AGENTS.md](file:///c:/Users/vicky/.gemini/antigravity/scratch/TicTakToe/AGENTS.md), [src/backend/AGENTS.md](file:///c:/Users/vicky/.gemini/antigravity/scratch/TicTakToe/src/backend/AGENTS.md), and [src/frontend/AGENTS.md](file:///c:/Users/vicky/.gemini/antigravity/scratch/TicTakToe/src/frontend/AGENTS.md).
 
-**Version**: 1.2.0 | **Ratified**: 2026-09-05 | **Last Amended**: 2026-09-05
+**Version**: 1.3.0 | **Ratified**: 2026-09-05 | **Last Amended**: 2026-09-05

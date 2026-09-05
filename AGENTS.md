@@ -66,10 +66,12 @@ Detailed guidelines and architectural rules are scoped per subsystem and loaded 
 - **Maintainability**: Keep methods and components small and cohesive; avoid tightly coupled classes.
 - **Readability**: Use clear, ubiquitous domain language and self-documenting code over obscure tricks.
 
-### 5. Repository Pattern & Clean Architecture
+### 5. Repository Pattern & Application Services
 - **Repository Contracts in Domain**: Aggregate repository interfaces (`IGameRepository`, `IScoreboardRepository`) must always reside in the Domain layer (`src/backend/Domain/Repositories/`).
 - **Implementations in Infrastructure**: Concrete repository implementations reside in Infrastructure (`src/backend/Infrastructure/Repositories/`).
-- **Zero DbContext in Endpoints**: Minimal API endpoints and controllers must never inject `DbContext` directly; always inject repository interfaces via primary constructors.
+- **Use Cases in Application Services**: All multi-aggregate workflows and repository orchestration must reside in Application services (`IGameService` / `GameService`) under `src/backend/Application/Services/`.
+- **Rich Domain Preservation**: Domain business rules (move validity, win/draw state) remain in entities (`Game.cs`); Application services orchestrate without stealing domain logic.
+- **Thin Endpoints**: Minimal API endpoints must never inject `DbContext` or repositories directly; endpoints inject Application services via primary constructors and act as thin HTTP adapters.
 
 ---
 

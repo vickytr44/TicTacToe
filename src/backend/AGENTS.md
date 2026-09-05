@@ -24,8 +24,10 @@ Domain (Core) ──◄── Application ──◄── Infrastructure & Api
 - **Purity**: Favor pure domain functions and immutable state transitions.
 
 ### 2. Application Layer (`src/backend/Application/`)
-- **Role**: Use case orchestration, service contracts, workflow handlers, and DTOs.
+- **Role**: Use case orchestration, application services (`IGameService`, `GameService`), workflow handlers, and DTOs.
 - **Dependencies**: Depends **only on Domain**.
+- **Use Case Orchestration**: All multi-aggregate workflows, repository queries, cross-aggregate updates (e.g. scoreboard on game finish), and domain entity invocations MUST reside in Application services under `src/backend/Application/Services/`.
+- **Preserve Rich Domain**: Application services coordinate domain entities; they MUST NOT strip or duplicate business logic out of entities into procedural service code.
 - **DTO Standards**:
   - Always use `sealed record` for request and response DTOs (enforces immutability and value equality).
   - Use positional records for response DTOs: `public sealed record GameResponse(...)`.
@@ -44,8 +46,8 @@ Domain (Core) ──◄── Application ──◄── Infrastructure & Api
 
 ### 4. Api Layer (`src/backend/Api/`)
 - **Role**: ASP.NET Core host, controllers/endpoints, middleware, OpenAPI/Swagger, CORS configuration.
-- **Dependencies**: Depends on `Domain` (entities, repository contracts), `Application` (DTOs, services), and wires `Infrastructure` implementations via Dependency Injection in `Program.cs`.
-- **No Direct DbContext**: **Never inject `DbContext` directly into endpoints or controllers**. Always inject repository interfaces (`IGameRepository`, `IScoreboardRepository`) via primary constructors.
+- **Dependencies**: Depends on `Application` (for services, DTOs) and wires `Infrastructure` & `Application` implementations via Dependency Injection in `Program.cs`.
+- **Thin Endpoints**: Endpoints and controllers MUST remain thin HTTP adapters. Always inject Application services (`IGameService`) via primary constructors—never repository interfaces or `DbContext` directly into endpoints.
 - **Endpoint Design**:
   - Maintain consistent HTTP semantics (proper status codes, REST conventions).
   - Centralize error handling via global exception handling middleware or Problem Details (`RFC 7807`).

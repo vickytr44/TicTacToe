@@ -1,12 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using TicTacToe.Api.Endpoints;
 using TicTacToe.Api.Middleware;
+using TicTacToe.Application;
 using TicTacToe.Infrastructure;
 using TicTacToe.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services
+builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddProblemDetails();
 
