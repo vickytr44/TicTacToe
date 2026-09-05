@@ -10,44 +10,44 @@
 
 ## Requirement Completeness
 
-- [ ] CHK001 Are all necessary game states (InProgress, Won, Draw) explicitly defined with clear transition criteria? [Completeness, Spec §Entities]
-- [ ] CHK002 Are the exact conditions for "game completion" documented, covering both win and draw scenarios? [Completeness, Spec §FR-004, §FR-005]
-- [ ] CHK003 Are the rules for invalid moves (occupied cell, wrong player, after completion) fully specified? [Completeness, Spec §FR-003]
-- [ ] CHK004 Is the behavior for mode switching mid-game explicitly defined? [Completeness, Spec §FR-025]
-- [ ] CHK005 Are loading/delay states defined for the computer opponent's turn? [Completeness, Spec §FR-015]
+- [x] CHK001 Are all necessary game states (InProgress, Won, Draw) explicitly defined with clear transition criteria? [Completeness, Spec §Entities]
+- [x] CHK002 Are the exact conditions for "game completion" documented, covering both win and draw scenarios? [Completeness, Spec §FR-004, §FR-005]
+- [x] CHK003 Are the rules for invalid moves (occupied cell, wrong player, after completion) fully specified? [Completeness, Spec §FR-003]
+- [x] CHK004 Is the behavior for mode switching mid-game explicitly defined? [Completeness, Spec §FR-025]
+- [x] CHK005 Are loading/delay states defined for the computer opponent's turn? [Completeness, Spec §FR-015]
 
 ## Requirement Clarity
 
-- [ ] CHK006 Is the "brief artificial delay" for the computer move quantified with specific timing thresholds? [Clarity, Spec §FR-015]
-- [ ] CHK007 Are the visual indicators for "highlight winning cells" clearly specified? [Clarity, Spec §FR-004]
-- [ ] CHK008 Is the phrase "keeps the board in its last known valid state" clearly defined in the context of a failed API request? [Clarity, Spec §FR-024]
-- [ ] CHK009 Are the specific elements of the "dismissible inline error banner" documented? [Clarity, Spec §FR-024]
+- [x] CHK006 Is the "brief artificial delay" for the computer move quantified with specific timing thresholds? [Clarity, Spec §FR-015]
+- [x] CHK007 Are the visual indicators for "highlight winning cells" clearly specified? [Clarity, Spec §FR-004]
+- [x] CHK008 Is the phrase "keeps the board in its last known valid state" clearly defined in the context of a failed API request? [Clarity, Spec §FR-024]
+- [x] CHK009 Are the specific elements of the "dismissible inline error banner" documented? [Clarity, Spec §FR-024]
 
 ## Requirement Consistency
 
-- [ ] CHK010 Is the Undo behavior consistent between Two-Player mode (single move) and Computer mode (move pair)? [Consistency, Spec §FR-009, §FR-010]
-- [ ] CHK011 Does the scoreboard update rule (only completed games) align with the mid-game reset/mode-switch behavior? [Consistency, Spec §FR-012]
-- [ ] CHK012 Is the frontend "silent ignore for occupied-cell clicks" consistent with the backend API validation rules? [Consistency, Spec §Assumptions]
+- [x] CHK010 Is the Undo behavior consistent between Two-Player mode (single move) and Computer mode (move pair)? [Consistency, Spec §FR-009, §FR-010]
+- [x] CHK011 Does the scoreboard update rule (only completed games) align with the mid-game reset/mode-switch behavior? [Consistency, Spec §FR-012]
+- [x] CHK012 Is the frontend "silent ignore for occupied-cell clicks" consistent with the backend API validation rules? [Consistency, Spec §Assumptions]
 
 ## Acceptance Criteria Quality & Measurability
 
-- [ ] CHK013 Can the <200ms response time for board updates be objectively verified? [Measurability, Spec §SC-001]
-- [ ] CHK014 Are the core game logic test cases (valid move, invalid move, win, draw, reset, undo) defined clearly enough to be converted into automated assertions? [Measurability, Spec §SC-006]
-- [ ] CHK015 Can the deterministic priority list for the computer strategy be independently tested? [Measurability, Spec §Assumptions]
+- [x] CHK013 Can the <200ms response time for board updates be objectively verified? [Measurability, Spec §SC-001]
+- [x] CHK014 Are the core game logic test cases (valid move, invalid move, win, draw, reset, undo) defined clearly enough to be converted into automated assertions? [Measurability, Spec §SC-006]
+- [x] CHK015 Can the deterministic priority list for the computer strategy be independently tested? [Measurability, Spec §Assumptions]
 
 ## Scenario & Edge Case Coverage
 
-- [ ] CHK016 Are requirements defined for a user rapidly clicking multiple cells before the backend responds? [Edge Case, Spec §Edge Cases]
-- [ ] CHK017 Are requirements specified for when the computer's strategic priorities all point to the same cell? [Edge Case, Spec §Edge Cases]
-- [ ] CHK018 Is the behavior defined for clicking Reset Scoreboard during an active game? [Coverage, Spec §Edge Cases]
-- [ ] CHK019 Are the requirements clear on what happens when a user clicks a cell during the computer's thinking delay? [Coverage, Spec §Edge Cases]
-- [ ] CHK020 Is the rollback scope (Undo) defined if it is clicked multiple times consecutively until the board is empty? [Coverage, Spec §Edge Cases]
+- [x] CHK016 Are requirements defined for a user rapidly clicking multiple cells before the backend responds? [Edge Case, Spec §Edge Cases]
+- [x] CHK017 Are requirements specified for when the computer's strategic priorities all point to the same cell? [Edge Case, Spec §Edge Cases]
+- [x] CHK018 Is the behavior defined for clicking Reset Scoreboard during an active game? [Coverage, Spec §Edge Cases]
+- [x] CHK019 Are the requirements clear on what happens when a user clicks a cell during the computer's thinking delay? [Coverage, Spec §Edge Cases]
+- [x] CHK020 Is the rollback scope (Undo) defined if it is clicked multiple times consecutively until the board is empty? [Coverage, Spec §Edge Cases]
 
 ## Non-Functional Requirements & Architecture
 
-- [ ] CHK021 Are architectural constraints (Clean Architecture, Standalone Angular, TDD) clearly documented for the implementation? [Completeness, Plan §Constitution Check]
-- [ ] CHK022 Are the API endpoints (verbs, routes, payloads) fully specified in the contracts? [Completeness, Spec §FR-018, Contracts]
-- [ ] CHK023 Are the rules for immutable DTOs and pure domain logic explicitly stated? [Clarity, Plan §Technical Context]
+- [x] CHK021 Are architectural constraints (Clean Architecture, Standalone Angular, TDD) clearly documented for the implementation? [Completeness, Plan §Constitution Check]
+- [x] CHK022 Are the API endpoints (verbs, routes, payloads) fully specified in the contracts? [Completeness, Spec §FR-018, Contracts]
+- [x] CHK023 Are the rules for immutable DTOs and pure domain logic explicitly stated? [Clarity, Plan §Technical Context]
 
 ## Notes
 
