@@ -54,7 +54,7 @@
 - [ ] T019 [US1] Implement POST `/api/games` minimal API endpoint in `src/backend/Api/Endpoints/GameEndpoints.cs`
 - [ ] T019a [US1] Implement GET `/api/games/{id}` endpoint in `src/backend/Api/Endpoints/GameEndpoints.cs`
 - [ ] T020 [US1] Implement POST `/api/games/{id}/moves` endpoint in `src/backend/Api/Endpoints/GameEndpoints.cs`
-- [ ] T021 [US1] Implement `GameStore` methods `createGame` and `makeMove` in `src/frontend/src/app/features/game/state/game.store.ts`
+- [ ] T021 [US1] Implement `GameStore` methods `createGame` and `makeMove` with an `isPending` state that disables board clicks while API requests are in flight in `src/frontend/src/app/features/game/state/game.store.ts`
 - [ ] T022 [P] [US1] Create `BoardComponent` and `CellComponent` in `src/frontend/src/app/features/game/components/`
 - [ ] T023 [US1] Create `GamePageComponent` (smart container) combining board and state in `src/frontend/src/app/features/game/containers/`
 - [ ] T023a [US1] Create `ErrorBannerComponent` and wire up HTTP error interceptor to display dismissible banner and prevent optimistic mutation in `src/frontend/src/app/features/game/components/`
@@ -217,9 +217,10 @@
 
 **Purpose**: E2E testing, error handling UX, and final styling.
 
-- [ ] T058 Implement Playwright E2E tests for core flows (Two-Player win, Computer mode, Reset, Scoreboard) in `tests/e2e/game.spec.ts`.
-- [ ] T059 Refine styling, ensure ARIA attributes, and add micro-animations to `tokens.css` and components.
+- [ ] T058 Implement Playwright E2E tests for core flows (Two-Player win, Computer mode, Reset, Scoreboard) and include performance assertions for <200ms click-to-render latency in `tests/e2e/game.spec.ts`.
+- [ ] T059 Refine styling, ensure ARIA attributes, add micro-animations to `tokens.css` and components, and verify responsive layout without horizontal scrolling on standard laptop viewports.
 - [ ] T060 Run quickstart.md validation to confirm E2E compliance.
+- [ ] T061 Create `README.md` containing the 12 required sections: Project overview, Tech stack, Features implemented, How to run backend, How to run frontend, API endpoint summary, How to run tests, AI tools and prompt summary, Design decisions, Clarifications and assumptions, Known limitations, Future improvements.
 
 ---
 
