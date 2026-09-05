@@ -2,8 +2,8 @@
 
 ## Project Overview
 This repository contains a full-stack web application consisting of:
-- **Backend**: ASP.NET Core Web API built with .NET 10 (`net10.0`) following Clean Architecture.
-- **Frontend**: Modern Angular single-page application using standalone components and signals.
+- **Backend**: ASP.NET Core Web API built with .NET 10 (`net10.0`) following Clean Architecture with SQLite.
+- **Frontend**: Modern Angular single-page application using standalone components, signals, and NgRx.
 - **Testing**: Strict Test-Driven Development (TDD) across both backend and frontend suites.
 
 ---
@@ -12,20 +12,27 @@ This repository contains a full-stack web application consisting of:
 
 ```
 ├── src/
-│   ├── backend/
-│   │   ├── Domain/          # Enterprise business logic, entities, value objects, enums (no external dependencies)
+│   ├── backend/             # ASP.NET Core Clean Architecture (.NET 10) -> see src/backend/AGENTS.md
+│   │   ├── Domain/          # Enterprise business logic, entities, value objects (zero external deps)
 │   │   ├── Application/     # Use cases, interfaces, DTOs, business workflows
-│   │   ├── Infrastructure/  # Repositories, data persistence, external service implementations
-│   │   └── Api/             # ASP.NET Core Web API, controllers/endpoints, middleware, CORS, Swagger
-│   └── frontend/
+│   │   ├── Infrastructure/  # Repositories, SQLite EF Core persistence, external adapters
+│   │   └── Api/             # ASP.NET Core Web API, endpoints, middleware, Swagger
+│   └── frontend/            # Angular Standalone SPA -> see src/frontend/AGENTS.md
 │       └── src/app/
 │           ├── core/        # API services, state management, models, HTTP interceptors
 │           ├── features/    # Feature-based smart containers and presentational components
-│           └── shared/      # Reusable UI components, design tokens, layout primitives
+│           └── shared/      # Reusable UI primitives, design tokens, layout components
 └── tests/
     ├── backend/             # xUnit unit and integration test suites (.NET 10)
     └── frontend/            # Angular unit and component test suites
 ```
+
+---
+
+## Subsystem Rule Files
+Detailed guidelines and architectural rules are scoped per subsystem and loaded automatically:
+- **Backend Guidelines**: [src/backend/AGENTS.md](src/backend/AGENTS.md) (.NET 10, Clean Architecture layers, sealed record DTOs, xUnit testing)
+- **Frontend Guidelines**: [src/frontend/AGENTS.md](src/frontend/AGENTS.md) (Angular Standalone, NgRx state management, Signals reactive state, Smart/Dumb components, design tokens)
 
 ---
 
@@ -38,13 +45,9 @@ This repository contains a full-stack web application consisting of:
   3. Refactor while maintaining green tests.
 - Maintain high test coverage across both backend domain/application layers and frontend components/services.
 
-### 2. Backend Clean Architecture
-- Follow inward dependency flow strictly:
-  - `Domain` has zero external framework or third-party dependencies.
-  - `Application` depends only on `Domain`.
-  - `Infrastructure` and `Api` depend on `Application` and implement abstractions.
-- Business rules and state machines reside exclusively in `Domain`.
-- Orchestration and use-case execution reside in `Application`.
+### 2. Backend State Authority
+- The backend serves as the single source of truth for application state and session data.
+- The frontend acts as a responsive presentation client, communicating via REST APIs and synchronizing its state with backend responses.
 
 ### 3. Strict SOLID & Software Craftsmanship
 - **Single Responsibility Principle (SRP)**: Each class, service, and component must have exactly one reason to change.
@@ -60,17 +63,11 @@ This repository contains a full-stack web application consisting of:
 - **Maintainability**: Keep methods and components small and cohesive; avoid tightly coupled classes.
 - **Readability**: Use clear, ubiquitous domain language and self-documenting code over obscure tricks.
 
-### 5. Backend State Authority
-- The backend serves as the single source of truth for application state and session data.
-- The frontend acts as a responsive presentation client, communicating via REST APIs and synchronizing its state with backend responses.
+---
 
-### 6. Frontend Architecture & Design System
-- **Standalone Architecture**: Modern Angular standalone components without legacy `NgModule` patterns.
-- **Reactive State Flow**: Angular Signals (`signal`, `computed`) for transparent, performant state management.
-- **Component Separation**:
-  - Smart (container) components orchestrate state and API communication.
-  - Presentational (dumb) components handle UI rendering and user interactions via pure inputs and outputs.
-- **Design Excellence**: Modern UI with responsive layouts, accessible controls, smooth micro-animations, and curated design tokens.
+## Documentation & README Maintenance
+- **Always Keep `README.md` Updated**: Whenever changes are made that are worthy of mention (e.g., architectural decisions, new features/endpoints, setup requirements, configuration keys, or major workflow changes), always update the root [README.md](README.md) file.
+- Maintain documentation integrity: Ensure project setup instructions, architectural diagrams, and feature lists reflect active codebase realities.
 
 ---
 

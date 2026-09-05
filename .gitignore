@@ -1,27 +1,102 @@
-# .NET
-bin/
-obj/
-*.user
-*.suo
-.vs/
+# ====================================================================
+# .NET & ASP.NET Core
+# ====================================================================
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
 TestResults/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+*.sln.docstates
+.vs/
+.cr/
+Generated\ Files/
+[Bb]uild[Ll]og.*
 
-# Node & Angular
+# ====================================================================
+# SQLite Database Files
+# ====================================================================
+*.db
+*.db-shm
+*.db-wal
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# ====================================================================
+# Node.js & Angular
+# ====================================================================
 node_modules/
 dist/
+tmp/
+out-tsc/
+bazel-out/
 .angular/
+.angular/cache/
+.npm/
+.pnpm-store/
+
+# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# OS & IDE
-.DS_Store
+# Test & Coverage
+coverage/
+.nyc_output/
+*.lcov
+
+# ====================================================================
+# Environment & Local Secrets
+# ====================================================================
+.env
+.env.local
+.env.*.local
+*.local.json
+appsettings.Local.json
+appsettings.Development.local.json
+
+# ====================================================================
+# Operating System & Editors
+# ====================================================================
+# Windows
 Thumbs.db
-*.swp
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux / Vim / Emacs
 *~
+*.swp
+*.swo
+.#*
+
+# JetBrains (Rider / IntelliJ / WebStorm)
 .idea/
+*.DotSettings.user
+
+# Visual Studio Code
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# ====================================================================
+# Multi-agent Tooling Artifacts
+# ====================================================================
+.claude/
+agent/
