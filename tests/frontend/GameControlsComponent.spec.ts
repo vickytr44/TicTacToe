@@ -57,4 +57,43 @@ describe('GameControlsComponent', () => {
 
     expect(emitted).toBe(false);
   });
+
+  it('should render Undo button with id undo-btn', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const undoBtn = compiled.querySelector('#undo-btn') as HTMLButtonElement;
+    expect(undoBtn).toBeTruthy();
+    expect(undoBtn.textContent).toContain('Undo');
+  });
+
+  it('should disable Undo button when canUndo is false', () => {
+    fixture.componentRef.setInput('canUndo', false);
+    fixture.detectChanges();
+
+    const undoBtn = fixture.nativeElement.querySelector('#undo-btn') as HTMLButtonElement;
+    expect(undoBtn.disabled).toBe(true);
+  });
+
+  it('should enable Undo button when canUndo is true and disabled is false', () => {
+    fixture.componentRef.setInput('canUndo', true);
+    fixture.componentRef.setInput('disabled', false);
+    fixture.detectChanges();
+
+    const undoBtn = fixture.nativeElement.querySelector('#undo-btn') as HTMLButtonElement;
+    expect(undoBtn.disabled).toBe(false);
+  });
+
+  it('should emit undo event when Undo button is clicked and canUndo is true', () => {
+    fixture.componentRef.setInput('canUndo', true);
+    fixture.detectChanges();
+
+    let emitted = false;
+    component.undo.subscribe(() => {
+      emitted = true;
+    });
+
+    const undoBtn = fixture.nativeElement.querySelector('#undo-btn') as HTMLButtonElement;
+    undoBtn.click();
+
+    expect(emitted).toBe(true);
+  });
 });

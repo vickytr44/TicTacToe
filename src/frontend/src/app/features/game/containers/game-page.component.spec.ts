@@ -104,4 +104,36 @@ describe('GamePageComponent', () => {
     expect(modeChangeSpy).toHaveBeenCalledWith('Computer');
     expect(storeSwitchSpy).toHaveBeenCalledWith('Computer');
   });
+
+  it('should render move history component with store moves', () => {
+    store.updateGame({
+      id: '123',
+      board: [[null, null, null], [null, null, null], [null, null, null]],
+      currentPlayer: 'O',
+      gameMode: 'TwoPlayer',
+      status: 'InProgress',
+      winner: null,
+      winningCells: [],
+      moves: [{ moveNumber: 1, player: 'X', row: 1, column: 1 }],
+      createdAt: new Date().toISOString()
+    });
+    fixture.detectChanges();
+
+    const history = fixture.debugElement.query(By.css('app-move-history'));
+    expect(history).toBeTruthy();
+    expect(history.componentInstance.moves().length).toBe(1);
+    expect(history.nativeElement.textContent).toContain('(1, 1)');
+  });
+
+  it('should render game controls and call onUndoMove when undo is emitted', () => {
+    const controls = fixture.debugElement.query(By.css('app-game-controls'));
+    expect(controls).toBeTruthy();
+
+    const undoSpy = vi.spyOn(component, 'onUndoMove');
+    const storeUndoSpy = vi.spyOn(store, 'undoMove');
+
+    controls.componentInstance.undo.emit();
+    expect(undoSpy).toHaveBeenCalled();
+    expect(storeUndoSpy).toHaveBeenCalled();
+  });
 });

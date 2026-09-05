@@ -91,6 +91,27 @@ public class Game
         Moves = [];
     }
 
+    public void UndoMove()
+    {
+        if (Status != GameStatus.InProgress)
+        {
+            throw new InvalidOperationException("Cannot undo move after the game has completed.");
+        }
+
+        if (Moves.Count == 0)
+        {
+            throw new InvalidOperationException("No moves to undo.");
+        }
+
+        var lastMove = Moves[^1];
+        Moves.RemoveAt(Moves.Count - 1);
+        Board[lastMove.Position.Row][lastMove.Position.Column] = null;
+        CurrentPlayer = lastMove.Player;
+        Winner = null;
+        WinningCells = [];
+        Status = GameStatus.InProgress;
+    }
+
     private bool CheckWin(Player player, out List<CellPosition> winningLine)
     {
         // Check rows

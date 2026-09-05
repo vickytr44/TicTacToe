@@ -129,12 +129,12 @@
 
 ### Tests for User Story 4 ⚠️
 
-- [ ] T036 [P] [US4] Component test for move history rendering in `tests/frontend/MoveHistoryComponent.spec.ts`
+- [X] T036 [P] [US4] Component test for move history rendering in `tests/frontend/MoveHistoryComponent.spec.ts`
 
 ### Implementation for User Story 4
 
-- [ ] T037 [US4] Implement chronological move history tracking (move number, player, row, column) populated after every valid move in `src/backend/Domain/Entities/Game.cs` and `GameResponse` mapping.
-- [ ] T038 [US4] Create `MoveHistoryComponent` in `src/frontend/src/app/features/game/components/` to render `Move[]` from store.
+- [X] T037 [US4] Implement chronological move history tracking (move number, player, row, column) populated after every valid move in `src/backend/Domain/Entities/Game.cs` and `GameResponse` mapping.
+- [X] T038 [US4] Create `MoveHistoryComponent` in `src/frontend/src/app/features/game/components/` to render `Move[]` from store.
 
 ---
 
@@ -146,14 +146,14 @@
 
 ### Tests for User Story 5 ⚠️
 
-- [ ] T039 [P] [US5] Unit tests for Two-Player undo logic explicitly asserting restoration of `InProgress` status from pre-terminal state, accurate history, and correct turn in `tests/backend/Domain.UnitTests/GameUndoTests.cs`
-- [ ] T040 [P] [US5] Integration test for POST `/api/games/{id}/undo` in `tests/backend/Api.IntegrationTests/GameEndpointsTests.cs`
+- [X] T039 [P] [US5] Unit tests for Two-Player undo logic explicitly asserting restoration of `InProgress` status from pre-terminal state, accurate history, and correct turn in `tests/backend/Domain.UnitTests/GameUndoTests.cs`
+- [X] T040 [P] [US5] Integration test for POST `/api/games/{id}/undo` in `tests/backend/Api.IntegrationTests/GameEndpointsTests.cs`
 
 ### Implementation for User Story 5
 
-- [ ] T041 [US5] Implement `UndoMove` logic in `src/backend/Domain/Entities/Game.cs` (handling Option A: disabled if won/draw, removes single move for TwoPlayer mode).
-- [ ] T042 [US5] Implement POST `/api/games/{id}/undo` endpoint in `src/backend/Api/Endpoints/GameEndpoints.cs`
-- [ ] T043 [US5] Add `undoMove` to `GameStore` and wire up Undo button in `GameControlsComponent` (disabled when history empty or game over).
+- [X] T041 [US5] Implement `UndoMove` logic in `src/backend/Domain/Entities/Game.cs` (handling Option A: disabled if won/draw, removes single move for TwoPlayer mode).
+- [X] T042 [US5] Implement POST `/api/games/{id}/undo` endpoint in `src/backend/Api/Endpoints/GameEndpoints.cs`
+- [X] T043 [US5] Add `undoMove` to `GameStore` and wire up Undo button in `GameControlsComponent` (disabled when history empty or game over).
 
 ---
 

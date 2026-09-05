@@ -5,6 +5,7 @@ import { BoardComponent } from '../components/board.component';
 import { ErrorBannerComponent } from '../components/error-banner.component';
 import { GameControlsComponent } from '../components/game-controls.component';
 import { GameModeSelectorComponent } from '../components/game-mode-selector.component';
+import { MoveHistoryComponent } from '../components/move-history.component';
 import { GameMode } from '../../../core/models/game.models';
 
 @Component({
@@ -15,7 +16,8 @@ import { GameMode } from '../../../core/models/game.models';
     BoardComponent,
     ErrorBannerComponent,
     GameControlsComponent,
-    GameModeSelectorComponent
+    GameModeSelectorComponent,
+    MoveHistoryComponent
   ],
   template: `
     <div class="game-page-container">
@@ -63,8 +65,14 @@ import { GameMode } from '../../../core/models/game.models';
       <section class="game-controls-section">
         <app-game-controls
           [disabled]="store.isPending() || store.isLoading()"
+          [canUndo]="store.canUndo()"
           (reset)="onResetGame()"
+          (undo)="onUndoMove()"
         />
+      </section>
+
+      <section class="game-history-section">
+        <app-move-history [moves]="store.moves()" />
       </section>
     </div>
   `,
@@ -77,6 +85,12 @@ import { GameMode } from '../../../core/models/game.models';
     }
 
     .game-mode-section {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .game-history-section {
       display: flex;
       justify-content: center;
       width: 100%;
@@ -172,6 +186,10 @@ export class GamePageComponent implements OnInit {
 
   onResetGame(): void {
     this.store.resetGame();
+  }
+
+  onUndoMove(): void {
+    this.store.undoMove();
   }
 
   onModeChange(mode: GameMode): void {

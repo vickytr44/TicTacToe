@@ -86,4 +86,18 @@ public class GameService(
 
         return game.ToDto();
     }
+
+    public async Task<GameResponse> UndoMoveAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var game = await gameRepository.GetByIdAsync(id, cancellationToken);
+        if (game == null)
+        {
+            throw new GameNotFoundException(id);
+        }
+
+        game.UndoMove();
+        await gameRepository.UpdateAsync(game, cancellationToken);
+
+        return game.ToDto();
+    }
 }

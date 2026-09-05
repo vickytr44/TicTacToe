@@ -169,6 +169,29 @@ export const GameStore = signalStore(
         })
       )
     ),
+    undoMove: rxMethod<void>(
+      pipe(
+        tap(() => patchState(store, { isPending: true, error: null })),
+        switchMap(() => {
+          const game = store.game();
+          if (!game) {
+            patchState(store, { isPending: false });
+            return of(null);
+          }
+          return api.undoMove(game.id).pipe(
+            tap((updatedGame) => {
+              patchState(store, { game: updatedGame, isPending: false, error: null });
+            }),
+            catchError((err) => {
+              const errorMsg =
+                err?.error?.detail || err?.error?.title || 'Something went wrong. Please try again.';
+              patchState(store, { isPending: false, error: errorMsg });
+              return of(null);
+            })
+          );
+        })
+      )
+    ),
     resetScoreboard: rxMethod<void>(
       pipe(
         switchMap(() =>

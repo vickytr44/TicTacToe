@@ -36,5 +36,11 @@ public static class GameEndpoints
             var game = await gameService.ResetGameAsync(id);
             return Results.Ok(game);
         });
+
+        group.MapPost("/{id:guid}/undo", async (Guid id, IGameService gameService) =>
+        {
+            var game = await gameService.UndoMoveAsync(id);
+            return Results.Ok(game);
+        });
     }
 }

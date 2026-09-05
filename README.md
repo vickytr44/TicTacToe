@@ -65,12 +65,14 @@ A modern, full-stack Tic-Tac-Toe application built with an **ASP.NET Core Clean 
 * `GET /api/games/{id}`: Fetch current game state.
 * `POST /api/games/{id}/moves`: Submit player move with validation and win/draw detection.
 * `POST /api/games/{id}/reset`: Reset the active game board while preserving session scoreboard and game mode.
+* `POST /api/games/{id}/undo`: Undo last move in Two-Player mode with state, board, and turn restoration (Option A).
 * **UI Features**:
   * Reactive interactive 3×3 grid with hover and turn indicators.
   * Turn badge and winning/draw banner with micro-animations.
   * Dismissible inline error banner for network/validation errors.
-  * `GameControlsComponent`: Reset game control button with cyber-dark styling.
+  * `GameControlsComponent`: Reset game and Undo move control buttons with cyber-dark styling.
   * `GameModeSelectorComponent`: Interactive segmented toggle between Two-Player and vs Computer modes.
+  * `MoveHistoryComponent`: Chronological move log tracking move numbers, player badges, and coordinates.
 
 ---
 

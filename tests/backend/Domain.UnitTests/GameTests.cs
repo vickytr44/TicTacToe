@@ -224,4 +224,30 @@ public class GameTests
 
         Assert.Contains("completed", ex.Message, StringComparison.OrdinalIgnoreCase);
     }
+
+    [Fact]
+    public void MakeMove_ChronologicalMoveHistory_TracksSequentialMovesAndPositions()
+    {
+        var game = Game.Create();
+        game.MakeMove(Player.X, CellPosition.FromZeroBased(0, 0)); // Move 1: X (1,1)
+        game.MakeMove(Player.O, CellPosition.FromZeroBased(1, 1)); // Move 2: O (2,2)
+        game.MakeMove(Player.X, CellPosition.FromZeroBased(2, 2)); // Move 3: X (3,3)
+
+        Assert.Equal(3, game.Moves.Count);
+
+        Assert.Equal(1, game.Moves[0].MoveNumber);
+        Assert.Equal(Player.X, game.Moves[0].Player);
+        Assert.Equal(0, game.Moves[0].Position.Row);
+        Assert.Equal(0, game.Moves[0].Position.Column);
+
+        Assert.Equal(2, game.Moves[1].MoveNumber);
+        Assert.Equal(Player.O, game.Moves[1].Player);
+        Assert.Equal(1, game.Moves[1].Position.Row);
+        Assert.Equal(1, game.Moves[1].Position.Column);
+
+        Assert.Equal(3, game.Moves[2].MoveNumber);
+        Assert.Equal(Player.X, game.Moves[2].Player);
+        Assert.Equal(2, game.Moves[2].Position.Row);
+        Assert.Equal(2, game.Moves[2].Position.Column);
+    }
 }

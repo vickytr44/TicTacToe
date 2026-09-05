@@ -268,4 +268,65 @@ public class GameEndpointsTests(WebApplicationFactory<Program> factory) : IClass
         Assert.Empty(resetGame.Moves);
         Assert.All(resetGame.Board, row => Assert.All(row, Assert.Null));
     }
+
+    [Fact]
+    public async Task PostUndo_ValidMove_Returns200Ok_AndRemovesLastMove()
+    {
+        var createResponse = await _client.PostAsJsonAsync("/api/games", new CreateGameRequest { Mode = "TwoPlayer" });
+        var created = await createResponse.Content.ReadFromJsonAsync<GameResponse>();
+        Assert.NotNull(created);
+
+        // Move 1: X at (1,1)
+        await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "X", Row = 1, Column = 1 });
+        // Move 2: O at (2,2)
+        await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "O", Row = 2, Column = 2 });
+
+        var undoResponse = await _client.PostAsync($"/api/games/{created.Id}/undo", null);
+        Assert.Equal(HttpStatusCode.OK, undoResponse.StatusCode);
+
+        var undoneGame = await undoResponse.Content.ReadFromJsonAsync<GameResponse>();
+        Assert.NotNull(undoneGame);
+        Assert.Equal("X", undoneGame.Board[0][0]);
+        Assert.Null(undoneGame.Board[1][1]);
+        Assert.Equal("O", undoneGame.CurrentPlayer);
+        Assert.Single(undoneGame.Moves);
+        Assert.Equal("X", undoneGame.Moves[0].Player);
+        Assert.Equal("InProgress", undoneGame.Status);
+    }
+
+    [Fact]
+    public async Task PostUndo_NoMoves_Returns400BadRequest()
+    {
+        var createResponse = await _client.PostAsJsonAsync("/api/games", new CreateGameRequest { Mode = "TwoPlayer" });
+        var created = await createResponse.Content.ReadFromJsonAsync<GameResponse>();
+        Assert.NotNull(created);
+
+        var undoResponse = await _client.PostAsync($"/api/games/{created.Id}/undo", null);
+        Assert.Equal(HttpStatusCode.BadRequest, undoResponse.StatusCode);
+    }
+
+    [Fact]
+    public async Task PostUndo_AfterWin_Returns400BadRequest()
+    {
+        var createResponse = await _client.PostAsJsonAsync("/api/games", new CreateGameRequest { Mode = "TwoPlayer" });
+        var created = await createResponse.Content.ReadFromJsonAsync<GameResponse>();
+        Assert.NotNull(created);
+
+        // Complete win for X
+        await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "X", Row = 1, Column = 1 });
+        await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "O", Row = 2, Column = 1 });
+        await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "X", Row = 1, Column = 2 });
+        await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "O", Row = 2, Column = 2 });
+        await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "X", Row = 1, Column = 3 });
+
+        var undoResponse = await _client.PostAsync($"/api/games/{created.Id}/undo", null);
+        Assert.Equal(HttpStatusCode.BadRequest, undoResponse.StatusCode);
+    }
+
+    [Fact]
+    public async Task PostUndo_NonExistentGame_Returns404NotFound()
+    {
+        var response = await _client.PostAsync($"/api/games/{Guid.NewGuid()}/undo", null);
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
 }

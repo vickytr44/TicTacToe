@@ -8,6 +8,18 @@ import { CommonModule } from '@angular/common';
   template: `
     <div class="game-controls-container" role="toolbar" aria-label="Game controls">
       <button
+        id="undo-btn"
+        type="button"
+        class="control-btn undo-btn"
+        [disabled]="disabled() || !canUndo()"
+        (click)="onUndo()"
+        aria-label="Undo last move"
+      >
+        <span class="btn-icon" aria-hidden="true">↩️</span>
+        <span class="btn-text">Undo Move</span>
+      </button>
+
+      <button
         id="reset-game-btn"
         type="button"
         class="control-btn reset-btn"
@@ -35,7 +47,7 @@ import { CommonModule } from '@angular/common';
       align-items: center;
       justify-content: center;
       gap: var(--space-sm);
-      padding: var(--space-sm) var(--space-xl);
+      padding: var(--space-sm) var(--space-lg);
       background: var(--bg-surface);
       color: var(--text-primary);
       border: 1px solid var(--border-default);
@@ -74,8 +86,12 @@ import { CommonModule } from '@angular/common';
       transition: transform var(--transition-fast);
     }
 
-    .control-btn:hover:not(:disabled) .btn-icon {
+    .reset-btn:hover:not(:disabled) .btn-icon {
       transform: rotate(45deg);
+    }
+
+    .undo-btn:hover:not(:disabled) .btn-icon {
+      transform: translateX(-2px);
     }
 
     .btn-text {
@@ -85,11 +101,19 @@ import { CommonModule } from '@angular/common';
 })
 export class GameControlsComponent {
   disabled = input<boolean>(false);
+  canUndo = input<boolean>(false);
   reset = output<void>();
+  undo = output<void>();
 
   onReset(): void {
     if (!this.disabled()) {
       this.reset.emit();
+    }
+  }
+
+  onUndo(): void {
+    if (!this.disabled() && this.canUndo()) {
+      this.undo.emit();
     }
   }
 }

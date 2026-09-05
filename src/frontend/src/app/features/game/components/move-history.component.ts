@@ -1,0 +1,178 @@
+import { Component, input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MoveDto } from '../../../core/models/game.models';
+
+@Component({
+  selector: 'app-move-history',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
+    <div class="move-history-card" aria-label="Move history panel">
+      <div class="history-header">
+        <span class="header-icon" aria-hidden="true">📜</span>
+        <h3 class="header-title">Move History</h3>
+        <span class="move-count-badge" [attr.aria-label]="moves().length + ' moves made'">
+          {{ moves().length }}
+        </span>
+      </div>
+
+      @if (moves().length === 0) {
+        <div class="empty-history">
+          <p>No moves yet. Start by clicking a cell.</p>
+        </div>
+      } @else {
+        <ol class="move-list" aria-label="Chronological move history">
+          @for (move of moves(); track move.moveNumber) {
+            <li
+              class="move-item"
+              [class.move-x]="move.player === 'X'"
+              [class.move-o]="move.player === 'O'"
+            >
+              <span class="move-index">#{{ move.moveNumber }}</span>
+              <span
+                class="player-badge"
+                [class.player-x]="move.player === 'X'"
+                [class.player-o]="move.player === 'O'"
+              >
+                {{ move.player }}
+              </span>
+              <span class="move-coords">({{ move.row }}, {{ move.column }})</span>
+            </li>
+          }
+        </ol>
+      }
+    </div>
+  `,
+  styles: [`
+    .move-history-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      padding: var(--space-md);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
+      transition: all var(--transition-normal);
+    }
+
+    .history-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding-bottom: var(--space-xs);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .header-icon {
+      font-size: 1.1rem;
+    }
+
+    .header-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0;
+      letter-spacing: -0.01em;
+      flex-grow: 1;
+    }
+
+    .move-count-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: var(--bg-elevated);
+      color: var(--text-secondary);
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--border-subtle);
+      font-family: var(--font-mono);
+    }
+
+    .empty-history {
+      padding: var(--space-md) var(--space-sm);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+
+    .move-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      max-height: 200px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-default) transparent;
+    }
+
+    .move-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--radius-sm);
+      background: var(--bg-glass);
+      border: 1px solid var(--border-subtle);
+      font-size: 0.88rem;
+      transition: background var(--transition-fast);
+      animation: fadeInMove 0.25s ease-out;
+    }
+
+    @keyframes fadeInMove {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .move-item:hover {
+      background: var(--bg-glass-hover);
+    }
+
+    .move-index {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      min-width: 24px;
+    }
+
+    .player-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 0.85rem;
+      font-family: var(--font-mono);
+    }
+
+    .player-x {
+      background: var(--color-player-x-bg);
+      color: var(--color-player-x);
+      border: 1px solid var(--color-player-x);
+    }
+
+    .player-o {
+      background: var(--color-player-o-bg);
+      color: var(--color-player-o);
+      border: 1px solid var(--color-player-o);
+    }
+
+    .move-coords {
+      font-family: var(--font-mono);
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      margin-left: auto;
+    }
+  `]
+})
+export class MoveHistoryComponent {
+  moves = input<MoveDto[]>([]);
+}
