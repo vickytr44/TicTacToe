@@ -18,15 +18,15 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T006 [P] Create domain enums (`Player`, `GameMode`, `GameStatus`) in `src/backend/Domain/Enums/`
-- [ ] T007 [P] Create value objects (`CellPosition`, `Move`) in `src/backend/Domain/ValueObjects/`
-- [ ] T008 [P] Create aggregate roots (`Game`, `Scoreboard`) in `src/backend/Domain/Entities/`
-- [ ] T009 Create Application layer DTOs (e.g., `GameResponse`, `CreateGameRequest`) in `src/backend/Application/DTOs/`
-- [ ] T010 Setup `TicTacToeDbContext` with SQLite and EF Core migrations in `src/backend/Infrastructure/Data/`
-- [ ] T011 Create global exception handler middleware for RFC 7807 Problem Details in `src/backend/Api/Middleware/`
-- [ ] T012 Set up Angular global styles, design tokens (`shared/styles/tokens.css`), and root component layout
-- [ ] T013 Create frontend `GameApiService` in `src/frontend/src/app/core/services/`
-- [ ] T014 Create frontend NgRx SignalStore `GameStore` in `src/frontend/src/app/features/game/state/`
+- [X] T006 [P] Create domain enums (`Player`, `GameMode`, `GameStatus`) in `src/backend/Domain/Enums/`
+- [X] T007 [P] Create value objects (`CellPosition`, `Move`) in `src/backend/Domain/ValueObjects/`
+- [X] T008 [P] Create aggregate roots (`Game`, `Scoreboard`) in `src/backend/Domain/Entities/`
+- [X] T009 Create Application layer DTOs (e.g., `GameResponse`, `CreateGameRequest`) in `src/backend/Application/DTOs/`
+- [X] T010 Setup `TicTacToeDbContext` with SQLite and EF Core migrations in `src/backend/Infrastructure/Data/`
+- [X] T011 Create global exception handler middleware for RFC 7807 Problem Details in `src/backend/Api/Middleware/`
+- [X] T012 Set up Angular global styles, design tokens (`shared/styles/tokens.css`), and root component layout
+- [X] T013 Create frontend `GameApiService` in `src/frontend/src/app/core/services/`
+- [X] T014 Create frontend NgRx SignalStore `GameStore` in `src/frontend/src/app/features/game/state/`
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
