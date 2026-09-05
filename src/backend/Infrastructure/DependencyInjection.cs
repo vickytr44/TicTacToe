@@ -3,7 +3,9 @@ namespace TicTacToe.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TicTacToe.Application.Repositories;
 using TicTacToe.Infrastructure.Data;
+using TicTacToe.Infrastructure.Repositories;
 
 public static class DependencyInjection
 {
@@ -13,6 +15,9 @@ public static class DependencyInjection
 
         services.AddDbContext<TicTacToeDbContext>(options =>
             options.UseSqlite(connectionString));
+
+        services.AddScoped<IGameRepository, GameRepository>();
+        services.AddScoped<IScoreboardRepository, ScoreboardRepository>();
 
         return services;
     }

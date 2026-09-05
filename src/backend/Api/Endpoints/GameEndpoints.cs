@@ -1,13 +1,12 @@
 namespace TicTacToe.Api.Endpoints;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using TicTacToe.Application.DTOs;
+using TicTacToe.Application.Repositories;
 using TicTacToe.Domain.Entities;
 using TicTacToe.Domain.Enums;
 using TicTacToe.Domain.Exceptions;
 using TicTacToe.Domain.ValueObjects;
-using TicTacToe.Infrastructure.Data;
 
 public static class GameEndpoints
 {
@@ -15,22 +14,21 @@ public static class GameEndpoints
     {
         var group = app.MapGroup("/api/games");
 
-        group.MapPost("/", async (CreateGameRequest request, TicTacToeDbContext db) =>
+        group.MapPost("/", async (CreateGameRequest request, IGameRepository gameRepository) =>
         {
             var mode = Enum.TryParse<GameMode>(request.Mode, true, out var parsedMode)
                 ? parsedMode
                 : GameMode.TwoPlayer;
 
             var game = Game.Create(mode);
-            db.Games.Add(game);
-            await db.SaveChangesAsync();
+            await gameRepository.AddAsync(game);
 
             return Results.Created($"/api/games/{game.Id}", game.ToDto());
         });
 
-        group.MapGet("/{id:guid}", async (Guid id, TicTacToeDbContext db) =>
+        group.MapGet("/{id:guid}", async (Guid id, IGameRepository gameRepository) =>
         {
-            var game = await db.Games.FindAsync(id);
+            var game = await gameRepository.GetByIdAsync(id);
             if (game == null)
             {
                 throw new GameNotFoundException(id);
@@ -39,7 +37,11 @@ public static class GameEndpoints
             return Results.Ok(game.ToDto());
         });
 
-        group.MapPost("/{id:guid}/moves", async (Guid id, [FromBody] MakeMoveRequest request, TicTacToeDbContext db) =>
+        group.MapPost("/{id:guid}/moves", async (
+            Guid id,
+            [FromBody] MakeMoveRequest request,
+            IGameRepository gameRepository,
+            IScoreboardRepository scoreboardRepository) =>
         {
             if (request.Row < 1 || request.Row > 3 || request.Column < 1 || request.Column > 3)
             {
@@ -51,7 +53,7 @@ public static class GameEndpoints
                 throw new ArgumentException($"Invalid player mark '{request.Player}'. Must be 'X' or 'O'.");
             }
 
-            var game = await db.Games.FindAsync(id);
+            var game = await gameRepository.GetByIdAsync(id);
             if (game == null)
             {
                 throw new GameNotFoundException(id);
@@ -60,25 +62,20 @@ public static class GameEndpoints
             var position = CellPosition.FromOneBased(request.Row, request.Column);
             game.MakeMove(player, position);
 
-            // If game just completed, update scoreboard exactly once
             if (game.Status == GameStatus.Won && game.Winner.HasValue)
             {
-                var scoreboard = await db.Scoreboards.FirstOrDefaultAsync(s => s.Id == 1);
-                if (scoreboard != null)
-                {
-                    scoreboard.RecordWin(game.Winner.Value);
-                }
+                var scoreboard = await scoreboardRepository.GetScoreboardAsync();
+                scoreboard.RecordWin(game.Winner.Value);
+                await scoreboardRepository.UpdateAsync(scoreboard);
             }
             else if (game.Status == GameStatus.Draw)
             {
-                var scoreboard = await db.Scoreboards.FirstOrDefaultAsync(s => s.Id == 1);
-                if (scoreboard != null)
-                {
-                    scoreboard.RecordDraw();
-                }
+                var scoreboard = await scoreboardRepository.GetScoreboardAsync();
+                scoreboard.RecordDraw();
+                await scoreboardRepository.UpdateAsync(scoreboard);
             }
 
-            await db.SaveChangesAsync();
+            await gameRepository.UpdateAsync(game);
 
             return Results.Ok(game.ToDto());
         });
