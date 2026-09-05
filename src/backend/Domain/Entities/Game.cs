@@ -146,6 +146,28 @@ public class Game
             throw new InvalidOperationException("No moves to undo.");
         }
 
+        if (GameMode == GameMode.Computer)
+        {
+            // Pop computer move (O)
+            var computerMove = Moves[^1];
+            Moves.RemoveAt(Moves.Count - 1);
+            Board[computerMove.Position.Row][computerMove.Position.Column] = null;
+
+            // Pop human move (X)
+            if (Moves.Count > 0)
+            {
+                var humanMove = Moves[^1];
+                Moves.RemoveAt(Moves.Count - 1);
+                Board[humanMove.Position.Row][humanMove.Position.Column] = null;
+            }
+
+            CurrentPlayer = Player.X;
+            Winner = null;
+            WinningCells = [];
+            Status = GameStatus.InProgress;
+            return;
+        }
+
         var lastMove = Moves[^1];
         Moves.RemoveAt(Moves.Count - 1);
         Board[lastMove.Position.Row][lastMove.Position.Column] = null;

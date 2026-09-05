@@ -204,12 +204,12 @@
 
 ### Tests for User Story 8 ⚠️
 
-- [ ] T055 [P] [US8] Unit tests for move-pair undo logic in `tests/backend/Domain.UnitTests/GameUndoTests.cs`
-- [ ] T055a [P] [US8] Integration test for POST `/api/games/{id}/undo` in Computer mode verifying both X and O moves are removed in `tests/backend/Api.IntegrationTests/GameEndpointsTests.cs`
+- [X] T055 [P] [US8] Unit tests for move-pair undo logic in `tests/backend/Domain.UnitTests/GameUndoTests.cs`
+- [X] T055a [P] [US8] Integration test for POST `/api/games/{id}/undo` in Computer mode verifying both X and O moves are removed in `tests/backend/Api.IntegrationTests/GameEndpointsTests.cs`
 
 ### Implementation for User Story 8
 
-- [ ] T056 [US8] Update `UndoMove` logic in `Game.cs` to pop two moves if GameMode == Computer and turn is X.
+- [X] T056 [US8] Update `UndoMove` logic in `Game.cs` to pop two moves if GameMode == Computer and turn is X.
 
 ---
 
@@ -217,10 +217,10 @@
 
 **Purpose**: E2E testing, error handling UX, and final styling.
 
-- [ ] T058 Implement Playwright E2E tests for core flows (Two-Player win, Computer mode, Reset, Scoreboard) and include performance assertions for <200ms click-to-render latency in `tests/e2e/game.spec.ts`.
-- [ ] T059 Refine styling, ensure ARIA attributes, add micro-animations to `tokens.css` and components, and verify responsive layout without horizontal scrolling on standard laptop viewports.
-- [ ] T060 Run quickstart.md validation to confirm E2E compliance.
-- [ ] T061 Create `README.md` containing the 12 required sections: Project overview, Tech stack, Features implemented, How to run backend, How to run frontend, API endpoint summary, How to run tests, AI tools and prompt summary, Design decisions, Clarifications and assumptions, Known limitations, Future improvements.
+- [X] T058 Implement Playwright E2E tests for core flows (Two-Player win, Computer mode, Reset, Scoreboard) and include performance assertions for <200ms click-to-render latency in `tests/e2e/game.spec.ts`.
+- [X] T059 Refine styling, ensure ARIA attributes, add micro-animations to `tokens.css` and components, and verify responsive layout without horizontal scrolling on standard laptop viewports.
+- [X] T060 Run quickstart.md validation to confirm E2E compliance.
+- [X] T061 Create `README.md` containing the 12 required sections: Project overview, Tech stack, Features implemented, How to run backend, How to run frontend, API endpoint summary, How to run tests, AI tools and prompt summary, Design decisions, Clarifications and assumptions, Known limitations, Future improvements.
 
 ---
 

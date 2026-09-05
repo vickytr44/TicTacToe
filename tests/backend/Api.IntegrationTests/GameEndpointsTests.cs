@@ -364,4 +364,28 @@ public class GameEndpointsTests(WebApplicationFactory<Program> factory) : IClass
         Assert.Equal("X", updated.CurrentPlayer);
         Assert.Equal("InProgress", updated.Status);
     }
+
+    [Fact]
+    public async Task PostUndo_ComputerMode_RemovesBothComputerAndHumanMoves()
+    {
+        var createResponse = await _client.PostAsJsonAsync("/api/games", new CreateGameRequest { Mode = "Computer" });
+        var created = await createResponse.Content.ReadFromJsonAsync<GameResponse>();
+        Assert.NotNull(created);
+
+        // Make move: X (1,1) -> Computer plays O (2,2)
+        var moveResponse = await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "X", Row = 1, Column = 1 });
+        Assert.Equal(HttpStatusCode.OK, moveResponse.StatusCode);
+
+        var undoResponse = await _client.PostAsync($"/api/games/{created.Id}/undo", null);
+        Assert.Equal(HttpStatusCode.OK, undoResponse.StatusCode);
+
+        var undoneGame = await undoResponse.Content.ReadFromJsonAsync<GameResponse>();
+        Assert.NotNull(undoneGame);
+
+        Assert.Empty(undoneGame.Moves);
+        Assert.Null(undoneGame.Board[0][0]);
+        Assert.Null(undoneGame.Board[1][1]);
+        Assert.Equal("X", undoneGame.CurrentPlayer);
+        Assert.Equal("InProgress", undoneGame.Status);
+    }
 }
