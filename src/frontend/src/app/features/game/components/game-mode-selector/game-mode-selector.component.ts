@@ -1,6 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { GameMode } from '../../../core/models/game.models';
+import { GameMode } from '../../../../core/models/game.models';
 
 @Component({
   selector: 'app-game-mode-selector',

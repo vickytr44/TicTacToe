@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { GameControlsComponent } from '../../src/frontend/src/app/features/game/components/game-controls.component';
+import { GameControlsComponent } from '../../src/frontend/src/app/features/game/components/game-controls/game-controls.component';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 describe('GameControlsComponent', () => {

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GamePageComponent } from './game-page.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { GameStore } from '../state/game.store';
+import { GameStore } from '../../state/game.store';
 import { By } from '@angular/platform-browser';
 
 describe('GamePageComponent', () => {

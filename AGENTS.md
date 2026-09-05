@@ -33,7 +33,7 @@ This repository contains a full-stack web application consisting of:
 ## Subsystem Rule Files
 Detailed guidelines and architectural rules are scoped per subsystem and loaded automatically:
 - **Backend Guidelines**: [src/backend/AGENTS.md](src/backend/AGENTS.md) (.NET 10, Clean Architecture layers, sealed record DTOs, xUnit testing)
-- **Frontend Guidelines**: [src/frontend/AGENTS.md](src/frontend/AGENTS.md) (Angular Standalone, NgRx state management, Signals reactive state, Smart/Dumb components, design tokens, mandatory three-file component separation: .ts, .html, .css)
+- **Frontend Guidelines**: [src/frontend/AGENTS.md](src/frontend/AGENTS.md) (Angular Standalone, NgRx state management, Signals reactive state, Smart/Dumb components, design tokens, dedicated folder-per-component with mandatory .ts, .html, .css)
 
 ---
 

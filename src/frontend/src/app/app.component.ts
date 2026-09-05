@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { GamePageComponent } from './features/game/containers/game-page.component';
+import { GamePageComponent } from './features/game/containers/game-page/game-page.component';
 
 @Component({
   imports: [GamePageComponent],

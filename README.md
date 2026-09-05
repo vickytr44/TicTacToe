@@ -56,7 +56,7 @@ A modern, full-stack Tic-Tac-Toe application built with an **ASP.NET Core Clean 
 * **Standalone Architecture**: 100% standalone components (`standalone: true`); no legacy `NgModule`.
 * **State Management**: NgRx SignalStore (`@ngrx/signals`) with native Angular Signals for reactive, boilerplate-free state flow.
 * **Component Separation**: Smart containers orchestrate state and API dispatches; dumb presentational components use pure `input()` and `output()`.
-* **Three-File Component Standard**: Every component is strictly split into dedicated `.ts`, `.html`, and `.css` files (`templateUrl`, `styleUrl`) for optimal readability and maintenance—no inline templates or styles.
+* **Folder-per-Component & Three-File Standard**: Every component resides in its own dedicated directory with strictly separated `.ts`, `.html`, and `.css` files (`templateUrl`, `styleUrl`)—no inline templates or styles.
 * **Design System**: Vanilla CSS design tokens in `shared/styles/tokens.css` with accessible, modern aesthetics and micro-animations.
 
 ---

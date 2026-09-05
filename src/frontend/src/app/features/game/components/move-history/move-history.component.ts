@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MoveDto } from '../../../core/models/game.models';
+import { MoveDto } from '../../../../core/models/game.models';
 
 @Component({
   selector: 'app-move-history',

@@ -51,11 +51,13 @@ src/app/
 - Synchronize local signal state immediately with backend REST API responses.
 - Implement clear loading, error, and optimistic state feedback for user actions.
 
-### 5. File Separation Standard (Mandatory: .ts, .html, .css)
-- **Three-File Component Pattern**: Every Angular component MUST be structured into three separate dedicated files for maximum readability and maintainability:
+### 5. Dedicated Folder & File Separation Standard (Mandatory: Folder-per-Component with .ts, .html, .css)
+- **Folder-per-Component Pattern**: Every Angular component and container MUST reside in its own dedicated folder matching the component name (e.g., `components/board/`, `components/cell/`, `components/error-banner/`, `components/game-controls/`, `components/game-mode-selector/`, `components/move-history/`, `containers/game-page/`).
+- **Three-File Component Pattern**: Within its dedicated folder, every component MUST be structured into three separate dedicated files for maximum readability and maintainability:
   1. `<name>.component.ts`: TypeScript class, component decorator using `templateUrl` and `styleUrl`, signal inputs (`input()`), outputs (`output()`), and injected services/stores.
   2. `<name>.component.html`: Pure HTML template with native control flow (`@if`, `@for`, `@switch`).
   3. `<name>.component.css`: Component-scoped Vanilla CSS styles referencing tokens from `tokens.css`.
+- **Co-located Specs**: Unit and component tests (`<name>.component.spec.ts`) should reside alongside the component files inside that same component folder.
 - **No Inline Templates or Styles**: Never use inline `template: \`...\`` or `styles: [\`...\`]` in component metadata.
 
 ---

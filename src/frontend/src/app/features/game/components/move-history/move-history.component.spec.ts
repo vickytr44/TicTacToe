@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MoveHistoryComponent } from './move-history.component';
-import { MoveDto } from '../../../core/models/game.models';
+import { MoveDto } from '../../../../core/models/game.models';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 describe('MoveHistoryComponent', () => {

@@ -1,12 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { GameStore } from '../state/game.store';
-import { BoardComponent } from '../components/board.component';
-import { ErrorBannerComponent } from '../components/error-banner.component';
-import { GameControlsComponent } from '../components/game-controls.component';
-import { GameModeSelectorComponent } from '../components/game-mode-selector.component';
-import { MoveHistoryComponent } from '../components/move-history.component';
-import { GameMode } from '../../../core/models/game.models';
+import { GameStore } from '../../state/game.store';
+import { BoardComponent } from '../../components/board/board.component';
+import { ErrorBannerComponent } from '../../components/error-banner/error-banner.component';
+import { GameControlsComponent } from '../../components/game-controls/game-controls.component';
+import { GameModeSelectorComponent } from '../../components/game-mode-selector/game-mode-selector.component';
+import { MoveHistoryComponent } from '../../components/move-history/move-history.component';
+import { GameMode } from '../../../../core/models/game.models';
 
 @Component({
   selector: 'app-game-page',

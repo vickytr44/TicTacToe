@@ -1,7 +1,7 @@
 import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CellComponent } from './cell.component';
-import { CellPositionDto, Player } from '../../../core/models/game.models';
+import { CellComponent } from '../cell/cell.component';
+import { CellPositionDto, Player } from '../../../../core/models/game.models';
 
 @Component({
   selector: 'app-board',

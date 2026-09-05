@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MoveHistoryComponent } from '../../src/frontend/src/app/features/game/components/move-history.component';
+import { MoveHistoryComponent } from '../../src/frontend/src/app/features/game/components/move-history/move-history.component';
 import { MoveDto } from '../../src/frontend/src/app/core/models/game.models';
 import { describe, it, expect, beforeEach } from 'vitest';
 

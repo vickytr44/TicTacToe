@@ -1,6 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Player } from '../../../core/models/game.models';
+import { Player } from '../../../../core/models/game.models';
 
 @Component({
   selector: 'app-cell',

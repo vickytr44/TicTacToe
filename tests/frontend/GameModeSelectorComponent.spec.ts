@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { GameModeSelectorComponent } from '../../src/frontend/src/app/features/game/components/game-mode-selector.component';
+import { GameModeSelectorComponent } from '../../src/frontend/src/app/features/game/components/game-mode-selector/game-mode-selector.component';
 import { GameMode } from '../../src/frontend/src/app/core/models/game.models';
 import { describe, it, expect, beforeEach } from 'vitest';
 
