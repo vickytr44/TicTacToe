@@ -32,6 +32,7 @@
 ## Notes
 
 - All checklist items passed on first validation iteration.
-- Option A (Disable Undo After Completion) was selected as the assumed default, documented in Assumptions and FR-022.
+- Option A (Disable Undo After Completion) was selected as the assumed default, documented in Assumptions and FR-023.
 - Computer strategy is specified as deterministic priority-based (not minimax), documented in Assumptions.
 - No [NEEDS CLARIFICATION] markers were needed — the problem statement was comprehensive enough to make informed decisions for all requirements.
+- Re-validated after clarification session (2026-09-05): 16/16 items passing, no state changes. Clarifications added FR-024 (error handling), FR-025 (mode switching), quantified SC-001 (200ms), and expanded edge cases.

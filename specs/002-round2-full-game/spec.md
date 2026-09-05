@@ -8,6 +8,17 @@
 
 **Input**: User description: "Build a browser-based Tic Tac Toe application with an Angular frontend and a .NET backend running locally. The application should allow users to play Tic Tac Toe, track moves, undo moves, maintain a scoreboard, and support a basic computer opponent mode."
 
+## Clarifications
+
+### Session 2026-09-05
+
+- Q: What should the frontend display when the backend API is unreachable or returns an unexpected error during gameplay? → A: Show a dismissible inline error banner above the board (e.g., "Something went wrong. Please try again.") and keep the board in its last known valid state.
+- Q: Should the computer's move appear instantly or with a brief artificial delay? → A: Brief artificial delay (300–500ms) before the computer's move appears, to let the player register the board change.
+- Q: Can the user click Undo multiple times consecutively in Computer Mode, and how many move-pairs are undoable? → A: Unlimited consecutive undos — each click removes one move-pair until the board is empty, then Undo disables. (Consistent with problem statement and Two-Player mode behavior.)
+- Q: When the user switches game mode mid-game, should the incomplete game affect the scoreboard? → A: No — only completed games (Won or Draw) affect the scoreboard. The mode selector remains interactive at all times; switching mid-game immediately starts a new game session without scoreboard impact.
+- Q: Should the UI disable board interaction while the computer is "thinking" during the 300–500ms delay? → A: Yes — cells are unclickable until the computer's move is placed and the turn returns to X.
+- Q: What is the acceptable maximum response time for a move to appear on the board after clicking a cell? → A: Under 200ms from click to board update in Two-Player mode (feels instantaneous).
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 — Two-Player Game with Win Detection (Priority: P1)
@@ -121,7 +132,7 @@ The user can choose to play against a computer opponent. The human plays as X an
 
 **Acceptance Scenarios**:
 
-1. **Given** Computer Mode is selected and it is the human's turn, **When** the human places X, **Then** the computer automatically places O in a valid cell following the strategy priority, the board updates to show both moves, and the turn indicator returns to X.
+1. **Given** Computer Mode is selected and it is the human's turn, **When** the human places X, **Then** the computer automatically places O in a valid cell following the strategy priority after a brief artificial delay (300–500ms), the board updates to show both moves, and the turn indicator returns to X.
 2. **Given** the computer can win with one move, **When** the computer's turn arrives, **Then** the computer plays the winning move.
 3. **Given** the human can win with one move, **When** the computer's turn arrives, **Then** the computer blocks the human's winning cell.
 4. **Given** no immediate win or block is needed and the center is empty, **When** the computer's turn arrives, **Then** the computer takes the center cell.
@@ -143,6 +154,7 @@ In Computer Mode, undo removes both the computer's last move and the human's pre
 
 1. **Given** Computer Mode with X at Row 1 Col 1 and O at Row 2 Col 2, **When** the user clicks Undo, **Then** both moves are removed, the board shows no marks, and it is X's turn.
 2. **Given** Computer Mode with no moves made, **When** the user views the Undo button, **Then** the Undo button is disabled.
+3. **Given** Computer Mode with multiple rounds played, **When** the user clicks Undo consecutively, **Then** each click removes one move-pair until no moves remain, at which point the Undo button disables.
 
 ---
 
@@ -159,6 +171,7 @@ Before starting a game, the user selects a game mode: Two-Player or Play Against
 1. **Given** the application loads, **When** the user sees the game interface, **Then** a mode selector is visible offering Two-Player and Play Against Computer options.
 2. **Given** the user selects Two-Player mode, **When** a new game starts, **Then** both X and O are controlled by users and undo removes a single move.
 3. **Given** the user selects Computer mode, **When** a new game starts, **Then** the human plays as X, the computer plays as O automatically, and undo removes a move pair.
+4. **Given** an active game is in progress, **When** the user switches the game mode, **Then** the current game is discarded without affecting the scoreboard, the board clears, move history empties, and a new game session begins in the selected mode.
 
 ---
 
@@ -169,7 +182,10 @@ Before starting a game, the user selects a game mode: Two-Player or Play Against
 - What happens if the user switches game modes mid-game? **Design decision**: Changing game mode during an active game starts a new game session (clearing the board and move history) and preserves the scoreboard. This avoids undefined states such as a computer needing to retroactively respond to moves made in Two-Player mode.
 - What happens when the computer's strategic priorities all point to the same cell? The computer simply plays that cell — priority order is evaluated sequentially and the first matching cell is selected.
 - What happens if the user clicks Reset Scoreboard during an active game? The scoreboard resets to zero; the current in-progress game continues unaffected.
+- What happens when the user clicks a cell during the computer's thinking delay in Computer Mode? **Design decision**: The board is disabled during the computer's turn — all cells are unclickable until the computer's move is placed and the turn returns to X. This prevents race conditions and aligns with the backend-as-source-of-truth principle.
 - What happens when undo is clicked multiple times consecutively in Two-Player mode? Each click removes one move until no moves remain, at which point the Undo button is disabled.
+- What happens when undo is clicked multiple times consecutively in Computer Mode? Each click removes one move-pair (computer's move + preceding human move) until no moves remain, at which point the Undo button is disabled. This mirrors Two-Player behavior at the move-pair granularity.
+- What happens when the backend API is unreachable or returns an unexpected error? **Design decision**: The frontend displays a dismissible inline error banner above the board (e.g., "Something went wrong. Please try again.") and keeps the board in its last known valid state. No board mutations occur until a successful backend response is received.
 
 ## Requirements *(mandatory)*
 
@@ -186,10 +202,10 @@ Before starting a game, the user selects a game mode: Two-Player or Play Against
 - **FR-009**: In Two-Player mode, Undo MUST remove only the single most recent move.
 - **FR-010**: In Computer mode, Undo MUST remove both the computer's last move and the preceding human move together as a pair.
 - **FR-011**: Undo MUST be disabled when no moves exist to undo.
-- **FR-012**: System MUST maintain a session-level scoreboard tracking X wins, O wins, and draws, updating exactly once per completed game.
+- **FR-012**: System MUST maintain a session-level scoreboard tracking X wins, O wins, and draws, updating exactly once per completed game (Won or Draw status only). Incomplete or abandoned games (e.g., due to mode switching or game reset) MUST NOT affect the scoreboard.
 - **FR-013**: System MUST provide a Reset Scoreboard action that resets all scoreboard counts to zero.
 - **FR-014**: System MUST support two game modes: Two-Player (both human) and Play Against Computer (human X, computer O).
-- **FR-015**: In Computer mode, the computer MUST automatically make a valid move after each human move, following this priority: (1) win if possible, (2) block opponent's win, (3) take center, (4) take a corner, (5) take any available cell.
+- **FR-015**: In Computer mode, the computer MUST automatically make a valid move after each human move following a brief artificial delay (300–500ms), using this priority: (1) win if possible, (2) block opponent's win, (3) take center, (4) take a corner, (5) take any available cell. During the delay, the UI MUST indicate that the computer is "thinking" (e.g., a subtle loading indicator or turn label change) and MUST disable board interaction (all cells unclickable) until the computer's move is placed and the turn returns to X.
 - **FR-016**: The computer MUST NOT make a move after the game is already completed.
 - **FR-017**: The backend MUST own all game state including session, move validation, game status, move history, and scoreboard. The frontend renders backend responses.
 - **FR-018**: The backend MUST expose REST API endpoints for all game operations. The suggested API scope is as follows (exact endpoint names may vary, but the solution must clearly document the API contract):
@@ -209,6 +225,8 @@ Before starting a game, the user selects a game mode: Two-Player or Play Against
 - **FR-021**: The game state response MUST include: game ID, board state, current player, game mode, game status, winner (if any), winning cells (if any), and move history. The current scoreboard MUST be either included in the game state response or retrievable via a separate dedicated mechanism.
 - **FR-022**: The frontend MUST display: game board, current player indicator, selected game mode, winner/draw message, highlighted winning cells, move history, scoreboard, Reset Game button, Undo button, and Reset Scoreboard button.
 - **FR-023**: After game completion, undo MUST be disabled to keep the scoreboard final for that game (Option A: Disable Undo After Completion).
+- **FR-024**: When a backend API request fails (network error, server error, or unexpected response), the frontend MUST display a dismissible inline error banner above the board with a user-friendly message, keep the board in its last known valid state, and NOT apply any optimistic state mutations.
+- **FR-025**: The game mode selector MUST remain interactive at all times, including during an active game. Switching mode mid-game MUST immediately discard the current game (without scoreboard impact), clear the board and move history, and start a new game session in the selected mode.
 
 ### Key Entities
 
@@ -220,7 +238,7 @@ Before starting a game, the user selects a game mode: Two-Player or Play Against
 
 ### Measurable Outcomes
 
-- **SC-001**: The game flow — placing marks, alternating turns, and reaching a win or draw — works smoothly without perceptible delays or interruptions in a standard local development environment.
+- **SC-001**: The game flow — placing marks, alternating turns, and reaching a win or draw — works smoothly with board updates appearing within 200ms of a cell click in Two-Player mode on a standard local development environment.
 - **SC-002**: Winning cells are visually highlighted immediately upon win detection, clearly distinguishing them from non-winning cells.
 - **SC-003**: In Computer mode, the computer responds automatically after the human's move without requiring any additional user action.
 - **SC-004**: Undo restores the board to its correct previous state with 100% accuracy across all game modes.
