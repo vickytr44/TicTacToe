@@ -1,6 +1,7 @@
 :host {
   display: block;
   width: 100%;
+  height: 100%;
   aspect-ratio: 1 / 1;
 }
 
@@ -16,6 +17,7 @@
   transition: all var(--transition-fast);
   position: relative;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .cell-button:hover:not(:disabled) {

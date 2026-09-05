@@ -1,3 +1,9 @@
+:host {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+}
+
 .move-history-card {
   background: var(--bg-surface);
   border: 1px solid var(--border-default);
@@ -8,7 +14,6 @@
   flex-direction: column;
   gap: var(--space-sm);
   width: 100%;
-  max-width: 420px;
   margin: 0 auto;
   transition: all var(--transition-normal);
 }

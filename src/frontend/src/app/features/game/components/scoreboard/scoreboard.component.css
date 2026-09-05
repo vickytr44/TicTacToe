@@ -1,3 +1,9 @@
+:host {
+  display: block;
+  width: 100%;
+  max-width: 440px;
+}
+
 .scoreboard-container {
   background: var(--bg-surface);
   border: 1px solid var(--border-default);
@@ -9,7 +15,6 @@
   flex-direction: column;
   gap: var(--space-sm);
   width: 100%;
-  max-width: 440px;
 }
 
 .scoreboard-header {
