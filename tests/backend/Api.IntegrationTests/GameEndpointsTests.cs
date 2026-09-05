@@ -138,4 +138,38 @@ public class GameEndpointsTests(WebApplicationFactory<Program> factory) : IClass
         var badResponse = await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "O", Row = 3, Column = 3 });
         Assert.Equal(HttpStatusCode.BadRequest, badResponse.StatusCode);
     }
+
+    [Fact]
+    public async Task PostMove_FullBoardDraw_Returns200Ok_WithDrawStatus_AndRejectsFurtherMoves()
+    {
+        var createResponse = await _client.PostAsJsonAsync("/api/games", new CreateGameRequest { Mode = "TwoPlayer" });
+        var created = await createResponse.Content.ReadFromJsonAsync<GameResponse>();
+        Assert.NotNull(created);
+
+        // Sequence producing Draw:
+        // (1,1)[X], (1,2)[O], (1,3)[X]
+        // (2,1)[X], (2,2)[O], (2,3)[O]
+        // (3,1)[O], (3,2)[X], (3,3)[X]
+        await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "X", Row = 1, Column = 1 });
+        await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "O", Row = 1, Column = 2 });
+        await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "X", Row = 1, Column = 3 });
+        await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "O", Row = 2, Column = 2 });
+        await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "X", Row = 2, Column = 1 });
+        await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "O", Row = 2, Column = 3 });
+        await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "X", Row = 3, Column = 2 });
+        await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "O", Row = 3, Column = 1 });
+        var drawResponse = await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "X", Row = 3, Column = 3 });
+
+        Assert.Equal(HttpStatusCode.OK, drawResponse.StatusCode);
+        var drawGame = await drawResponse.Content.ReadFromJsonAsync<GameResponse>();
+        Assert.NotNull(drawGame);
+        Assert.Equal("Draw", drawGame.Status);
+        Assert.Null(drawGame.Winner);
+        Assert.Empty(drawGame.WinningCells);
+        Assert.Equal(9, drawGame.Moves.Count);
+
+        // Subsequent move must be rejected
+        var afterDrawResponse = await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "O", Row = 1, Column = 1 });
+        Assert.Equal(HttpStatusCode.BadRequest, afterDrawResponse.StatusCode);
+    }
 }

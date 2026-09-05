@@ -54,4 +54,30 @@ describe('GamePageComponent', () => {
     expect(wonBadge).toBeTruthy();
     expect(wonBadge.nativeElement.textContent).toContain('Player X Wins!');
   });
+
+  it('should display draw badge and disable board when game is a draw', () => {
+    store.updateGame({
+      id: '123',
+      board: [
+        ['X', 'O', 'X'],
+        ['X', 'O', 'O'],
+        ['O', 'X', 'X']
+      ],
+      currentPlayer: 'O',
+      gameMode: 'TwoPlayer',
+      status: 'Draw',
+      winner: null,
+      winningCells: [],
+      moves: [],
+      createdAt: new Date().toISOString()
+    });
+    fixture.detectChanges();
+
+    const drawBadge = fixture.debugElement.query(By.css('.status-badge.draw'));
+    expect(drawBadge).toBeTruthy();
+    expect(drawBadge.nativeElement.textContent).toContain("It's a Draw!");
+
+    const board = fixture.debugElement.query(By.css('app-board'));
+    expect(board.componentInstance.disabled()).toBe(true);
+  });
 });

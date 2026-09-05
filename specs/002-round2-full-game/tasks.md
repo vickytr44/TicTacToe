@@ -71,13 +71,13 @@
 
 ### Tests for User Story 2 ⚠️
 
-- [ ] T024 [P] [US2] Unit tests for draw detection logic in `tests/backend/Domain.UnitTests/GameTests.cs`
-- [ ] T024a [P] [US2] Integration test verifying API returns Draw status and frontend correctly renders the draw state in `tests/backend/Api.IntegrationTests/GameEndpointsTests.cs`
+- [X] T024 [P] [US2] Unit tests for draw detection logic in `tests/backend/Domain.UnitTests/GameTests.cs`
+- [X] T024a [P] [US2] Integration test verifying API returns Draw status and frontend correctly renders the draw state in `tests/backend/Api.IntegrationTests/GameEndpointsTests.cs`
 
 ### Implementation for User Story 2
 
-- [ ] T025 [US2] Implement draw detection logic in `src/backend/Domain/Entities/Game.cs`
-- [ ] T026 [US2] Update `GamePageComponent` to display "It's a draw" message when status is Draw in `src/frontend/src/app/features/game/containers/game-page.component.ts`
+- [X] T025 [US2] Implement draw detection logic in `src/backend/Domain/Entities/Game.cs`
+- [X] T026 [US2] Update `GamePageComponent` to display "It's a draw" message when status is Draw in `src/frontend/src/app/features/game/containers/game-page.component.ts`
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
 

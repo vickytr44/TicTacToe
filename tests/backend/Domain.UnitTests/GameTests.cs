@@ -180,4 +180,48 @@ public class GameTests
 
         Assert.Contains("completed", ex.Message, StringComparison.OrdinalIgnoreCase);
     }
+
+    [Fact]
+    public void MakeMove_DrawGame_DetectsDrawAndSetsStatus()
+    {
+        var game = Game.Create();
+        // Sequence producing Draw:
+        // Row 0: (0,0)[X], (0,1)[O], (0,2)[X]
+        // Row 1: (1,0)[X], (1,1)[O], (1,2)[O]
+        // Row 2: (2,0)[O], (2,1)[X], (2,2)[X]
+        game.MakeMove(Player.X, CellPosition.FromZeroBased(0, 0)); // 1. X
+        game.MakeMove(Player.O, CellPosition.FromZeroBased(0, 1)); // 2. O
+        game.MakeMove(Player.X, CellPosition.FromZeroBased(0, 2)); // 3. X
+        game.MakeMove(Player.O, CellPosition.FromZeroBased(1, 1)); // 4. O
+        game.MakeMove(Player.X, CellPosition.FromZeroBased(1, 0)); // 5. X
+        game.MakeMove(Player.O, CellPosition.FromZeroBased(1, 2)); // 6. O
+        game.MakeMove(Player.X, CellPosition.FromZeroBased(2, 1)); // 7. X
+        game.MakeMove(Player.O, CellPosition.FromZeroBased(2, 0)); // 8. O
+        game.MakeMove(Player.X, CellPosition.FromZeroBased(2, 2)); // 9. X
+
+        Assert.Equal(GameStatus.Draw, game.Status);
+        Assert.Null(game.Winner);
+        Assert.Empty(game.WinningCells);
+        Assert.Equal(9, game.Moves.Count);
+    }
+
+    [Fact]
+    public void MakeMove_AfterDraw_ThrowsInvalidMoveException()
+    {
+        var game = Game.Create();
+        game.MakeMove(Player.X, CellPosition.FromZeroBased(0, 0));
+        game.MakeMove(Player.O, CellPosition.FromZeroBased(0, 1));
+        game.MakeMove(Player.X, CellPosition.FromZeroBased(0, 2));
+        game.MakeMove(Player.O, CellPosition.FromZeroBased(1, 1));
+        game.MakeMove(Player.X, CellPosition.FromZeroBased(1, 0));
+        game.MakeMove(Player.O, CellPosition.FromZeroBased(1, 2));
+        game.MakeMove(Player.X, CellPosition.FromZeroBased(2, 1));
+        game.MakeMove(Player.O, CellPosition.FromZeroBased(2, 0));
+        game.MakeMove(Player.X, CellPosition.FromZeroBased(2, 2));
+
+        var ex = Assert.Throws<InvalidMoveException>(() =>
+            game.MakeMove(Player.O, CellPosition.FromZeroBased(0, 0)));
+
+        Assert.Contains("completed", ex.Message, StringComparison.OrdinalIgnoreCase);
+    }
 }
