@@ -4,7 +4,9 @@
 - **Framework**: Modern Angular (Standalone Components)
 - **State Management**: **NgRx** (`@ngrx/signals` / `signalStore` or NgRx Store) integrating with Angular Signals
 - **Styling**: Vanilla CSS with custom design tokens (Avoid TailwindCSS unless explicitly requested)
-- **Testing**: Angular unit & component test runner with TDD (Red-Green-Refactor)
+- **Testing**:
+  - Unit & Component: Angular test runner with TDD (Red-Green-Refactor)
+  - End-to-End: Playwright E2E test suite (`tests/e2e/`) with Playwright MCP server integration
 
 ---
 
@@ -58,10 +60,16 @@ src/app/
 
 ---
 
-## Testing Standards (TDD)
-- **Location**: Component and service test specs in `tests/frontend/` (or co-located `*.spec.ts`).
-- **Lifecycle**: TDD Red-Green-Refactor:
-  1. Write failing component/service unit tests first.
-  2. Implement the minimum component template/logic to satisfy the test.
-  3. Refactor component code and styling while maintaining green tests.
-- Test user interactions by querying DOM elements, simulating click/input events, and asserting signal state changes.
+## Testing Standards (TDD & E2E)
+- **Unit & Component Tests**:
+  - **Location**: Component and service test specs in `tests/frontend/` (or co-located `*.spec.ts`).
+  - **Lifecycle**: TDD Red-Green-Refactor:
+    1. Write failing component/service unit tests first.
+    2. Implement the minimum component template/logic to satisfy the test.
+    3. Refactor component code and styling while maintaining green tests.
+  - Test user interactions by querying DOM elements, simulating click/input events, and asserting signal state changes.
+- **End-to-End (E2E) Tests with Playwright**:
+  - **Location**: Test scripts in `tests/e2e/`.
+  - **Scope**: Validate end-to-end user journeys (game creation, turns, victory, draw, board reset, responsiveness).
+- **Playwright MCP Server Tooling**:
+  - The connected `playwright` MCP server tools (`browser_navigate`, `browser_click`, `browser_find`, `browser_snapshot`, `browser_take_screenshot`, `browser_console_messages`, etc.) must be used during development for live browser testing, DOM tree inspection, visual assertions, and debugging E2E flows.

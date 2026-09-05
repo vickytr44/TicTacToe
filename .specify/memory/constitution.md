@@ -1,31 +1,28 @@
 <!--
 Sync Impact Report
-- Version change: [CONSTITUTION_VERSION] (unratified template) → 1.0.0
+- Version change: 1.0.0 → 1.1.0
 - List of modified principles:
-  - [PRINCIPLE_1_NAME] → I. Test-Driven Development (TDD First - NON-NEGOTIABLE)
-  - [PRINCIPLE_2_NAME] → II. Clean Architecture & Inward Dependency Flow
-  - [PRINCIPLE_3_NAME] → III. Backend State Authority
-  - [PRINCIPLE_4_NAME] → IV. Angular Standalone Architecture & Reactive Signal State
-  - [PRINCIPLE_5_NAME] → V. Software Craftsmanship, Modern Idioms & Design Excellence
+  - I. Test-Driven Development (TDD First - NON-NEGOTIABLE) → I. Test-Driven Development & End-to-End Verification (NON-NEGOTIABLE) (expanded to require Playwright E2E testing and Playwright MCP server tooling integration)
 - Added sections:
-  - Technology Stack & Architectural Constraints (Section 2)
-  - Development Workflow & Quality Gates (Section 3)
+  - End-to-End testing requirements under Technology Stack & Architectural Constraints and Quality Gates
 - Removed sections:
   - None
 - Follow-up TODOs:
-  - None (all template placeholders resolved with concrete architectural rules)
+  - None
 -->
 
 # Tic-Tac-Toe Constitution
 
 ## Core Principles
 
-### I. Test-Driven Development (TDD First - NON-NEGOTIABLE)
-- **Red-Green-Refactor Lifecycle**: Strict TDD is mandatory across both backend and frontend suites.
-- **Test-First Order**: Failing unit or integration tests MUST be written and verified failing before implementing any production code.
+### I. Test-Driven Development & End-to-End Verification (NON-NEGOTIABLE)
+- **Red-Green-Refactor Lifecycle**: Strict TDD is mandatory across backend, frontend, and end-to-end suites.
+- **Test-First Order**: Failing unit, integration, or component tests MUST be written and verified failing before implementing any production code.
 - **Implementation Constraint**: Production code is authored solely to make the failing test pass, followed immediately by refactoring while maintaining green tests.
 - **Coverage Mandate**: Pure domain logic in `src/backend/Domain/` MUST maintain 100% unit test coverage. Frontend components and services MUST rigorously test DOM element bindings, simulated events, and signal state transitions.
-- *Rationale*: Eliminates untested edge cases, guarantees regression resilience, and drives decoupled, highly testable software design.
+- **End-to-End Verification (Playwright)**: Full-stack user flows—such as game initialization, turn alternation, win/draw detection, and session reset—MUST be covered by Playwright E2E tests in `tests/e2e/`.
+- **Playwright MCP Tooling Integration**: Live browser interactions, UI visual checks, DOM snapshot inspections, and regression assertions during development MUST leverage the connected Playwright MCP server tools (`browser_navigate`, `browser_click`, `browser_snapshot`, `browser_take_screenshot`, etc.).
+- *Rationale*: Eliminates untested edge cases, guarantees regression resilience, ensures cross-browser fidelity, and drives decoupled, highly testable software design.
 
 ### II. Clean Architecture & Inward Dependency Flow
 - **Strict Inward Flow**: Architecture MUST adhere to inward dependency rules: `Domain` ◄ `Application` ◄ `Infrastructure` & `Api`.
@@ -70,13 +67,15 @@ Sync Impact Report
   - **Accessibility**: Semantic HTML5 hierarchy (single `h1` per view), descriptive interactive labels, ARIA landmarks, and full keyboard navigation.
 - **Testing Suites**:
   - **Backend**: xUnit (.NET 10) in `tests/backend/`.
-  - **Frontend**: Angular unit and component test runner in `tests/frontend/` or co-located specs.
+  - **Frontend Unit & Component**: Angular test runner in `tests/frontend/` or co-located specs.
+  - **End-to-End (E2E)**: Playwright in `tests/e2e/`, integrated with the Playwright MCP server for browser automation, inspection, and verification.
 
 ## Development Workflow & Quality Gates
 
 - **TDD Quality Gate**: No production code or endpoint logic may be implemented or committed without a preceding failing test demonstrating its requirement.
+- **E2E Verification Gate**: Complete end-to-end flows (game creation, alternating turns, win/draw conditions, reset) must pass Playwright test suites before production deployment.
 - **Documentation Integrity Gate**: Whenever architectural decisions, new endpoints, or configuration changes occur, the root `README.md` MUST be updated immediately.
-- **Verification Gate**: Backend must build cleanly without warnings (`dotnet build`) and pass all tests (`dotnet test tests/backend/`). Frontend must pass unit tests (`npm test`).
+- **Verification Gate**: Backend must build cleanly without warnings (`dotnet build`) and pass all tests (`dotnet test tests/backend/`). Frontend must pass unit tests (`npm test`) and E2E tests (`npx playwright test`).
 - **Commit Standards**: Git commit messages MUST follow imperative mood, 50 characters or fewer, no conventional prefixes (`feat:`, `fix:`, etc.), and no multi-line bodies.
 
 ## Governance
@@ -89,4 +88,4 @@ Sync Impact Report
   - **PATCH**: Clarifications, wording refinements, and non-semantic corrections.
 - **Runtime Guidance**: Operational implementation guidelines are maintained in [AGENTS.md](file:///c:/Users/vicky/.gemini/antigravity/scratch/TicTakToe/AGENTS.md), [src/backend/AGENTS.md](file:///c:/Users/vicky/.gemini/antigravity/scratch/TicTakToe/src/backend/AGENTS.md), and [src/frontend/AGENTS.md](file:///c:/Users/vicky/.gemini/antigravity/scratch/TicTakToe/src/frontend/AGENTS.md).
 
-**Version**: 1.0.0 | **Ratified**: 2026-09-05 | **Last Amended**: 2026-09-05
+**Version**: 1.1.0 | **Ratified**: 2026-09-05 | **Last Amended**: 2026-09-05

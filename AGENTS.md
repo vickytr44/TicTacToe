@@ -4,7 +4,7 @@
 This repository contains a full-stack web application consisting of:
 - **Backend**: ASP.NET Core Web API built with .NET 10 (`net10.0`) following Clean Architecture with SQLite.
 - **Frontend**: Modern Angular single-page application using standalone components, signals, and NgRx.
-- **Testing**: Strict Test-Driven Development (TDD) across both backend and frontend suites.
+- **Testing**: Strict Test-Driven Development (TDD) across backend, frontend, and Playwright end-to-end suites.
 
 ---
 
@@ -24,7 +24,8 @@ This repository contains a full-stack web application consisting of:
 │           └── shared/      # Reusable UI primitives, design tokens, layout components
 └── tests/
     ├── backend/             # xUnit unit and integration test suites (.NET 10)
-    └── frontend/            # Angular unit and component test suites
+    ├── frontend/            # Angular unit and component test suites
+    └── e2e/                 # Playwright end-to-end test suite
 ```
 
 ---
@@ -38,12 +39,14 @@ Detailed guidelines and architectural rules are scoped per subsystem and loaded 
 
 ## Non-Negotiable Core Principles
 
-### 1. Test-Driven Development (TDD First)
-- Follow the Red-Green-Refactor lifecycle for all new code and endpoints:
-  1. Write failing unit/integration tests first.
+### 1. Test-Driven Development (TDD First & E2E Verification)
+- Follow the Red-Green-Refactor lifecycle for all new code, components, and endpoints:
+  1. Write failing unit/integration/component tests first.
   2. Implement the minimum code necessary to make the tests pass.
   3. Refactor while maintaining green tests.
 - Maintain high test coverage across both backend domain/application layers and frontend components/services.
+- **Playwright End-to-End Testing**: Cover critical user journeys (game creation, turns, win/draw conditions, board reset) with Playwright E2E suites under `tests/e2e/`.
+- **Playwright MCP Tooling**: Use the connected Playwright MCP server tools (`browser_navigate`, `browser_click`, `browser_snapshot`, `browser_take_screenshot`, etc.) during development for live browser automation, UI inspection, and regression verification.
 
 ### 2. Backend State Authority
 - The backend serves as the single source of truth for application state and session data.

@@ -13,7 +13,7 @@ A modern, full-stack Tic-Tac-Toe application built with an **ASP.NET Core Clean 
 | **Frontend** | Angular (v19+ Standalone Components), TypeScript |
 | **State Management** | NgRx SignalStore (`@ngrx/signals`) & Angular Signals (`signal`, `computed`) |
 | **Styling** | Vanilla CSS with custom design tokens (no TailwindCSS) |
-| **Testing** | xUnit (.NET 10) & Angular Test Runner (TDD Red-Green-Refactor) |
+| **Testing** | xUnit (.NET 10), Angular Test Runner, Playwright E2E |
 
 ---
 
@@ -33,7 +33,8 @@ A modern, full-stack Tic-Tac-Toe application built with an **ASP.NET Core Clean 
 │           └── shared/      # UI primitives, design tokens, layout components
 └── tests/
     ├── backend/             # xUnit unit and integration test suites (.NET 10)
-    └── frontend/            # Angular unit and component test suites
+    ├── frontend/            # Angular unit and component test suites
+    └── e2e/                 # Playwright end-to-end test suite (MCP enabled)
 ```
 
 ---
@@ -69,11 +70,18 @@ A modern, full-stack Tic-Tac-Toe application built with an **ASP.NET Core Clean 
 * [Node.js](https://nodejs.org/) (LTS) & npm
 * Angular CLI (`npm install -g @angular/cli`)
 
-### Running Tests (TDD)
+### Running Tests (TDD & E2E)
 ```bash
 # Run backend tests
 dotnet test tests/backend/
 
-# Run frontend tests
+# Run frontend unit/component tests
 cd src/frontend && npm test
+
+# Run Playwright end-to-end tests
+npx playwright test
 ```
+
+### Playwright MCP Integration
+The workspace is configured with the **Playwright MCP Server** (`playwright`), enabling direct browser navigation, live snapshot verification, DOM queries, and interactive E2E testing during agentic sessions.
+
