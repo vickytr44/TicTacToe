@@ -4,6 +4,8 @@ using TicTacToe.Domain.Enums;
 using TicTacToe.Domain.Exceptions;
 using TicTacToe.Domain.ValueObjects;
 
+using TicTacToe.Domain.Services;
+
 public class Game
 {
     public Guid Id { get; private set; }
@@ -48,6 +50,11 @@ public class Game
             throw new InvalidMoveException("Game is already completed.");
         }
 
+        if (GameMode == GameMode.Computer && player == Player.O)
+        {
+            throw new InvalidMoveException("Player O is controlled by the computer in Computer mode.");
+        }
+
         if (player != CurrentPlayer)
         {
             throw new InvalidMoveException($"It is not Player {player}'s turn.");
@@ -79,6 +86,42 @@ public class Game
         }
 
         CurrentPlayer = (CurrentPlayer == Player.X) ? Player.O : Player.X;
+
+        if (GameMode == GameMode.Computer && CurrentPlayer == Player.O && Status == GameStatus.InProgress)
+        {
+            ApplyComputerMove();
+        }
+    }
+
+    private void ApplyComputerMove()
+    {
+        var computerMove = ComputerStrategy.CalculateMove(Board, Player.O);
+        if (computerMove == null)
+        {
+            return;
+        }
+
+        var r = computerMove.Row;
+        var c = computerMove.Column;
+
+        Board[r][c] = Player.O;
+        Moves.Add(new Move(Moves.Count + 1, Player.O, computerMove));
+
+        if (CheckWin(Player.O, out var winningLine))
+        {
+            Status = GameStatus.Won;
+            Winner = Player.O;
+            WinningCells = winningLine;
+            return;
+        }
+
+        if (Moves.Count == 9)
+        {
+            Status = GameStatus.Draw;
+            return;
+        }
+
+        CurrentPlayer = Player.X;
     }
 
     public void Reset()

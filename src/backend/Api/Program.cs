@@ -37,6 +37,7 @@ app.UseCors();
 
 app.MapGet("/api/health", () => Results.Ok(new { status = "healthy" }));
 app.MapGameEndpoints();
+app.MapScoreboardEndpoints();
 
 app.Run();
 

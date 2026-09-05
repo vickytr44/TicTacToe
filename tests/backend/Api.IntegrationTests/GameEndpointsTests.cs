@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using TicTacToe.Application.DTOs;
 
+[Collection("IntegrationTests")]
 public class GameEndpointsTests(WebApplicationFactory<Program> factory) : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly HttpClient _client = factory.CreateClient();
@@ -328,5 +329,39 @@ public class GameEndpointsTests(WebApplicationFactory<Program> factory) : IClass
     {
         var response = await _client.PostAsync($"/api/games/{Guid.NewGuid()}/undo", null);
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task PostMove_ComputerMode_AutomaticallyExecutesComputerTurn_ReturnsBothMoves()
+    {
+        var createResponse = await _client.PostAsJsonAsync("/api/games", new CreateGameRequest { Mode = "Computer" });
+        var created = await createResponse.Content.ReadFromJsonAsync<GameResponse>();
+        Assert.NotNull(created);
+        Assert.Equal("Computer", created.GameMode);
+
+        var moveResponse = await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "X", Row = 1, Column = 1 });
+        Assert.Equal(HttpStatusCode.OK, moveResponse.StatusCode);
+
+        var updated = await moveResponse.Content.ReadFromJsonAsync<GameResponse>();
+        Assert.NotNull(updated);
+        Assert.Equal(2, updated.Moves.Count);
+
+        // First move is X at (1,1)
+        Assert.Equal("X", updated.Moves[0].Player);
+        Assert.Equal(1, updated.Moves[0].Row);
+        Assert.Equal(1, updated.Moves[0].Column);
+
+        // Second move is O taking center (2,2)
+        Assert.Equal("O", updated.Moves[1].Player);
+        Assert.Equal(2, updated.Moves[1].Row);
+        Assert.Equal(2, updated.Moves[1].Column);
+
+        // Board has both marks
+        Assert.Equal("X", updated.Board[0][0]);
+        Assert.Equal("O", updated.Board[1][1]);
+
+        // Turn returned to X
+        Assert.Equal("X", updated.CurrentPlayer);
+        Assert.Equal("InProgress", updated.Status);
     }
 }

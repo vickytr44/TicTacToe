@@ -9,7 +9,7 @@ using TicTacToe.Domain.ValueObjects;
 
 public class GameService(
     IGameRepository gameRepository,
-    IScoreboardRepository scoreboardRepository) : IGameService
+    IScoreboardService scoreboardService) : IGameService
 {
     public async Task<GameResponse> CreateGameAsync(CreateGameRequest request, CancellationToken cancellationToken = default)
     {
@@ -57,15 +57,11 @@ public class GameService(
 
         if (game.Status == GameStatus.Won && game.Winner.HasValue)
         {
-            var scoreboard = await scoreboardRepository.GetScoreboardAsync(cancellationToken);
-            scoreboard.RecordWin(game.Winner.Value);
-            await scoreboardRepository.UpdateAsync(scoreboard, cancellationToken);
+            await scoreboardService.RecordWinAsync(game.Winner.Value, cancellationToken);
         }
         else if (game.Status == GameStatus.Draw)
         {
-            var scoreboard = await scoreboardRepository.GetScoreboardAsync(cancellationToken);
-            scoreboard.RecordDraw();
-            await scoreboardRepository.UpdateAsync(scoreboard, cancellationToken);
+            await scoreboardService.RecordDrawAsync(cancellationToken);
         }
 
         await gameRepository.UpdateAsync(game, cancellationToken);

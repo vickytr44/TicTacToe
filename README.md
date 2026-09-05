@@ -64,9 +64,11 @@ A modern, full-stack Tic-Tac-Toe application built with an **ASP.NET Core Clean 
 ## Implemented API Endpoints & Features
 * `POST /api/games`: Create a new game session (`TwoPlayer` or `Computer` mode).
 * `GET /api/games/{id}`: Fetch current game state.
-* `POST /api/games/{id}/moves`: Submit player move with validation and win/draw detection.
+* `POST /api/games/{id}/moves`: Submit player move with validation and win/draw detection. In Computer Mode, automatically triggers strategic AI response.
 * `POST /api/games/{id}/reset`: Reset the active game board while preserving session scoreboard and game mode.
 * `POST /api/games/{id}/undo`: Undo last move in Two-Player mode with state, board, and turn restoration (Option A).
+* `GET /api/scoreboard`: Fetch session-level scoreboard counts (`xWins`, `oWins`, `draws`).
+* `POST /api/scoreboard/reset`: Reset the session scoreboard counts to zero.
 * **UI Features**:
   * Reactive interactive 3×3 grid with hover and turn indicators.
   * Turn badge and winning/draw banner with micro-animations.
@@ -74,6 +76,8 @@ A modern, full-stack Tic-Tac-Toe application built with an **ASP.NET Core Clean 
   * `GameControlsComponent`: Reset game and Undo move control buttons with cyber-dark styling.
   * `GameModeSelectorComponent`: Interactive segmented toggle between Two-Player and vs Computer modes.
   * `MoveHistoryComponent`: Chronological move log tracking move numbers, player badges, and coordinates.
+  * `ScoreboardComponent`: Cyber-dark session scoreboard displaying X Wins, O Wins, Draws, and independent scoreboard reset.
+  * `ComputerOpponentMode`: Priority AI strategy (Win > Block > Center > Corner > Any) with 300–500ms artificial thinking delay, spinner indicator, and UI locking.
 
 ---
 

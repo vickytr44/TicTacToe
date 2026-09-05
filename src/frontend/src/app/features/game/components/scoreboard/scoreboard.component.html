@@ -1,0 +1,32 @@
+<div class="scoreboard-container" role="region" aria-label="Session Scoreboard">
+  <div class="scoreboard-header">
+    <h3 class="scoreboard-title">Session Scoreboard</h3>
+    <button
+      type="button"
+      class="reset-scoreboard-btn"
+      [disabled]="disabled()"
+      (click)="onReset()"
+      aria-label="Reset Scoreboard"
+    >
+      <span class="btn-icon">↺</span>
+      <span class="btn-text">Reset</span>
+    </button>
+  </div>
+
+  <div class="score-cards">
+    <div class="score-card x">
+      <span class="score-label">Player X</span>
+      <span class="score-val">{{ scoreboard().xWins }}</span>
+    </div>
+
+    <div class="score-card draws">
+      <span class="score-label">Draws</span>
+      <span class="score-val">{{ scoreboard().draws }}</span>
+    </div>
+
+    <div class="score-card o">
+      <span class="score-label">Player O</span>
+      <span class="score-val">{{ scoreboard().oWins }}</span>
+    </div>
+  </div>
+</div>

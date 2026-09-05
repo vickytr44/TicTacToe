@@ -1,7 +1,7 @@
-import { computed, inject } from '@angular/core';
+import { computed, inject, InjectionToken } from '@angular/core';
 import { signalStore, withState, withComputed, withMethods, patchState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, switchMap, tap, catchError, of } from 'rxjs';
+import { pipe, switchMap, tap, catchError, of, timer } from 'rxjs';
 import { GameApiService } from '../../../core/services/game-api.service';
 import {
   GameMode,
@@ -9,6 +9,10 @@ import {
   Player,
   ScoreboardResponse
 } from '../../../core/models/game.models';
+
+export const COMPUTER_THINKING_DELAY = new InjectionToken<number>('COMPUTER_THINKING_DELAY', {
+  factory: () => 400
+});
 
 export interface GameState {
   game: GameResponse | null;
@@ -53,7 +57,7 @@ export const GameStore = signalStore(
       return g.status === 'InProgress' && g.moves.length > 0;
     })
   })),
-  withMethods((store, api = inject(GameApiService)) => ({
+  withMethods((store, api = inject(GameApiService), delayMs = inject(COMPUTER_THINKING_DELAY)) => ({
     clearError() {
       patchState(store, { error: null });
     },
@@ -64,7 +68,7 @@ export const GameStore = signalStore(
       patchState(store, { isComputerThinking });
     },
     updateGame(game: GameResponse) {
-      patchState(store, { game, error: null });
+      patchState(store, { game, isLoading: false, isPending: false, error: null });
     },
     loadScoreboard: rxMethod<void>(
       pipe(
@@ -127,19 +131,68 @@ export const GameStore = signalStore(
 
           const player = game.currentPlayer;
           return api.makeMove(game.id, { player, row, column }).pipe(
-            tap((updatedGame) => {
-              patchState(store, { game: updatedGame, isPending: false, error: null });
+            switchMap((updatedGame) => {
+              const computerMoved =
+                updatedGame.gameMode === 'Computer' &&
+                updatedGame.moves.length >= 2 &&
+                updatedGame.moves[updatedGame.moves.length - 1].player === 'O';
+
+              if (computerMoved) {
+                const intermediateBoard = game.board.map((r) => [...r]);
+                intermediateBoard[row - 1][column - 1] = 'X';
+
+                const intermediateGame: GameResponse = {
+                  ...updatedGame,
+                  board: intermediateBoard,
+                  currentPlayer: 'O',
+                  status: 'InProgress',
+                  winner: null,
+                  winningCells: [],
+                  moves: updatedGame.moves.slice(0, -1)
+                };
+
+                patchState(store, {
+                  game: intermediateGame,
+                  isPending: false,
+                  isComputerThinking: true,
+                  error: null
+                });
+
+                return timer(delayMs).pipe(
+                  tap(() => {
+                    patchState(store, {
+                      game: updatedGame,
+                      isComputerThinking: false,
+                      error: null
+                    });
+                    if (updatedGame.status === 'Won' || updatedGame.status === 'Draw') {
+                      api.getScoreboard().subscribe({
+                        next: (sb) => patchState(store, { scoreboard: sb }),
+                        error: () => {}
+                      });
+                    }
+                  })
+                );
+              }
+
+              patchState(store, {
+                game: updatedGame,
+                isPending: false,
+                isComputerThinking: false,
+                error: null
+              });
               if (updatedGame.status === 'Won' || updatedGame.status === 'Draw') {
                 api.getScoreboard().subscribe({
                   next: (sb) => patchState(store, { scoreboard: sb }),
                   error: () => {}
                 });
               }
+              return of(updatedGame);
             }),
             catchError((err) => {
               const errorMsg =
                 err?.error?.detail || err?.error?.title || 'Something went wrong. Please try again.';
-              patchState(store, { isPending: false, error: errorMsg });
+              patchState(store, { isPending: false, isComputerThinking: false, error: errorMsg });
               return of(null);
             })
           );

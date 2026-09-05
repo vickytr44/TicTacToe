@@ -250,4 +250,64 @@ public class GameTests
         Assert.Equal(2, game.Moves[2].Position.Row);
         Assert.Equal(2, game.Moves[2].Position.Column);
     }
+
+    [Fact]
+    public void MakeMove_ComputerMode_AutomaticallyAppliesComputerMove()
+    {
+        var game = Game.Create(GameMode.Computer);
+
+        // Human X plays (0,0)
+        game.MakeMove(Player.X, CellPosition.FromZeroBased(0, 0));
+
+        // Assert: 2 moves made, O took center (1,1), turn is back to X
+        Assert.Equal(2, game.Moves.Count);
+        Assert.Equal(Player.X, game.Moves[0].Player);
+        Assert.Equal(0, game.Moves[0].Position.Row);
+        Assert.Equal(0, game.Moves[0].Position.Column);
+
+        Assert.Equal(Player.O, game.Moves[1].Player);
+        Assert.Equal(1, game.Moves[1].Position.Row);
+        Assert.Equal(1, game.Moves[1].Position.Column);
+
+        Assert.Equal(Player.X, game.CurrentPlayer);
+        Assert.Equal(GameStatus.InProgress, game.Status);
+    }
+
+    [Fact]
+    public void MakeMove_ComputerMode_HumanCannotPlayAsPlayerO()
+    {
+        var game = Game.Create(GameMode.Computer);
+
+        var ex = Assert.Throws<InvalidMoveException>(() =>
+            game.MakeMove(Player.O, CellPosition.FromZeroBased(0, 0)));
+
+        Assert.Contains("computer", ex.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void MakeMove_ComputerMode_WhenHumanWins_ComputerDoesNotMove()
+    {
+        var game = Game.Create(GameMode.Computer);
+
+        // Move 1: X (0,0) -> O takes center (1,1)
+        game.MakeMove(Player.X, CellPosition.FromZeroBased(0, 0));
+        Assert.Equal(Player.O, game.Board[1][1]);
+
+        // Move 2: X (2,2) -> O takes corner (0,2)
+        game.MakeMove(Player.X, CellPosition.FromZeroBased(2, 2));
+        Assert.Equal(Player.O, game.Board[0][2]);
+
+        // Move 3: X (2,0) blocks anti-diagonal and creates fork on row 2 and col 0 -> O blocks row 2 at (2,1)
+        game.MakeMove(Player.X, CellPosition.FromZeroBased(2, 0));
+        Assert.Equal(Player.O, game.Board[2][1]);
+
+        // Move 4: X completes col 0 at (1,0) -> X wins!
+        game.MakeMove(Player.X, CellPosition.FromZeroBased(1, 0));
+
+        Assert.Equal(GameStatus.Won, game.Status);
+        Assert.Equal(Player.X, game.Winner);
+        Assert.Equal(3, game.WinningCells.Count);
+        // Total moves should be 7 (X: 4, O: 3)
+        Assert.Equal(7, game.Moves.Count);
+    }
 }

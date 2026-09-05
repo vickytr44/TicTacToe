@@ -1,0 +1,124 @@
+.scoreboard-container {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md) var(--space-lg);
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  width: 100%;
+  max-width: 440px;
+}
+
+.scoreboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.scoreboard-title {
+  font-family: var(--font-main);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.reset-scoreboard-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: transparent;
+  border: 1px solid var(--border-default);
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  padding: 0.25rem 0.6rem;
+  font-size: 0.8rem;
+  font-family: var(--font-main);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.reset-scoreboard-btn:hover:not(:disabled) {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border-color: var(--color-primary);
+}
+
+.reset-scoreboard-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-icon {
+  font-size: 0.85rem;
+}
+
+.score-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sm);
+}
+
+.score-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.score-card:hover {
+  transform: translateY(-1px);
+}
+
+.score-card.x {
+  border-color: rgba(6, 182, 212, 0.3);
+}
+
+.score-card.x .score-val {
+  color: var(--color-player-x);
+  text-shadow: 0 0 12px var(--color-player-x-glow);
+}
+
+.score-card.o {
+  border-color: rgba(244, 63, 94, 0.3);
+}
+
+.score-card.o .score-val {
+  color: var(--color-player-o);
+  text-shadow: 0 0 12px var(--color-player-o-glow);
+}
+
+.score-card.draws {
+  border-color: var(--border-default);
+}
+
+.score-card.draws .score-val {
+  color: var(--text-secondary);
+}
+
+.score-label {
+  font-family: var(--font-main);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.score-val {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+}

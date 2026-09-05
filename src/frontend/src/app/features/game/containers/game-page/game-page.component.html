@@ -12,6 +12,14 @@
     />
   </section>
 
+  <section class="game-scoreboard-section">
+    <app-scoreboard
+      [scoreboard]="store.scoreboard()"
+      [disabled]="store.isPending() || store.isLoading()"
+      (resetScoreboard)="onResetScoreboard()"
+    />
+  </section>
+
   <section class="game-status-card" aria-live="polite">
     @if (store.status() === 'Won') {
       <div class="status-badge won" [class.winner-x]="store.winner() === 'X'" [class.winner-o]="store.winner() === 'O'">
@@ -22,6 +30,11 @@
       <div class="status-badge draw">
         <span class="status-icon">🤝</span>
         <span class="status-text">It's a Draw!</span>
+      </div>
+    } @else if (store.isComputerThinking()) {
+      <div class="status-badge thinking">
+        <span class="thinking-spinner"></span>
+        <span class="status-text">Computer is thinking...</span>
       </div>
     } @else {
       <div class="status-badge turn" [class.turn-x]="store.currentPlayer() === 'X'" [class.turn-o]="store.currentPlayer() === 'O'">
@@ -35,14 +48,14 @@
     <app-board
       [board]="store.board()"
       [winningCells]="store.winningCells()"
-      [disabled]="store.isPending() || store.isGameOver() || store.isLoading()"
+      [disabled]="store.isPending() || store.isGameOver() || store.isLoading() || store.isComputerThinking()"
       (cellClick)="onCellClick($event)"
     />
   </section>
 
   <section class="game-controls-section">
     <app-game-controls
-      [disabled]="store.isPending() || store.isLoading()"
+      [disabled]="store.isPending() || store.isLoading() || store.isComputerThinking()"
       [canUndo]="store.canUndo()"
       (reset)="onResetGame()"
       (undo)="onUndoMove()"

@@ -165,15 +165,15 @@
 
 ### Tests for User Story 6 ⚠️
 
-- [ ] T044 [P] [US6] Unit tests for Scoreboard explicitly asserting exact-once increment for X/O/Draw, preservation on Reset Game, clearing on Reset Scoreboard, and ignoring incomplete games in `tests/backend/Domain.UnitTests/ScoreboardTests.cs`
-- [ ] T045 [P] [US6] Integration tests for GET `/api/scoreboard` and POST `/api/scoreboard/reset` in `tests/backend/Api.IntegrationTests/ScoreboardEndpointsTests.cs`
+- [X] T044 [P] [US6] Unit tests for Scoreboard explicitly asserting exact-once increment for X/O/Draw, preservation on Reset Game, clearing on Reset Scoreboard, and ignoring incomplete games in `tests/backend/Domain.UnitTests/ScoreboardTests.cs`
+- [X] T045 [P] [US6] Integration tests for GET `/api/scoreboard` and POST `/api/scoreboard/reset` in `tests/backend/Api.IntegrationTests/ScoreboardEndpointsTests.cs`
 
 ### Implementation for User Story 6
 
-- [ ] T046 [US6] Implement singleton `ScoreboardService` in `src/backend/Application/Services/ScoreboardService.cs` (updating upon terminal game states).
-- [ ] T047 [US6] Implement GET `/api/scoreboard` and POST `/api/scoreboard/reset` endpoints in `src/backend/Api/Endpoints/ScoreboardEndpoints.cs`
-- [ ] T048 [US6] Create `ScoreboardStore` in `src/frontend/src/app/core/state/scoreboard.store.ts`
-- [ ] T049 [US6] Create `ScoreboardComponent` in `src/frontend/src/app/features/game/components/`
+- [X] T046 [US6] Implement singleton `ScoreboardService` in `src/backend/Application/Services/ScoreboardService.cs` (updating upon terminal game states).
+- [X] T047 [US6] Implement GET `/api/scoreboard` and POST `/api/scoreboard/reset` endpoints in `src/backend/Api/Endpoints/ScoreboardEndpoints.cs`
+- [X] T048 [US6] Create `ScoreboardStore` in `src/frontend/src/app/core/state/scoreboard.store.ts`
+- [X] T049 [US6] Create `ScoreboardComponent` in `src/frontend/src/app/features/game/components/`
 
 ---
 
@@ -185,14 +185,14 @@
 
 ### Tests for User Story 7 ⚠️
 
-- [ ] T050 [P] [US7] Unit tests for Computer strategy explicitly covering all 5 priorities (Win, Block, Center, Corner, Any) in `tests/backend/Domain.UnitTests/ComputerStrategyTests.cs`
-- [ ] T051 [P] [US7] Component test for computer "thinking" indicator and delay UI lock in `tests/frontend/GamePageComponent.spec.ts`
+- [X] T050 [P] [US7] Unit tests for Computer strategy explicitly covering all 5 priorities (Win, Block, Center, Corner, Any) in `tests/backend/Domain.UnitTests/ComputerStrategyTests.cs`
+- [X] T051 [P] [US7] Component test for computer "thinking" indicator and delay UI lock in `tests/frontend/GamePageComponent.spec.ts`
 
 ### Implementation for User Story 7
 
-- [ ] T052 [US7] Implement pure `ComputerStrategy` logic in `src/backend/Domain/Services/ComputerStrategy.cs`
-- [ ] T053 [US7] Update `MakeMove` in Game entity / Application logic to automatically apply computer move if GameMode == Computer.
-- [ ] T054 [US7] Implement 300-500ms artificial delay, "thinking" UI indicator, and UI locking (disable board clicks) during computer turn in `GameStore` / `GamePageComponent`.
+- [X] T052 [US7] Implement pure `ComputerStrategy` logic in `src/backend/Domain/Services/ComputerStrategy.cs`
+- [X] T053 [US7] Update `MakeMove` in Game entity / Application logic to automatically apply computer move if GameMode == Computer.
+- [X] T054 [US7] Implement 300-500ms artificial delay, "thinking" UI indicator, and UI locking (disable board clicks) during computer turn in `GameStore` / `GamePageComponent`.
 
 ---
 

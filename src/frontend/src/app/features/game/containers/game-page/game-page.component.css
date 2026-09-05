@@ -11,6 +11,12 @@
   width: 100%;
 }
 
+.game-scoreboard-section {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 .game-history-section {
   display: flex;
   justify-content: center;
@@ -78,6 +84,26 @@
   background: var(--bg-surface);
   color: var(--text-secondary);
   border: 1px solid var(--border-default);
+}
+
+.status-badge.thinking {
+  background: rgba(99, 102, 241, 0.15);
+  color: var(--color-primary);
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  box-shadow: 0 0 15px var(--color-primary-glow);
+}
+
+.thinking-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(99, 102, 241, 0.3);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 @keyframes bounceWin {

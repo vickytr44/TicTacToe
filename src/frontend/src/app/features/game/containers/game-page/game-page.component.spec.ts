@@ -136,4 +136,53 @@ describe('GamePageComponent', () => {
     expect(undoSpy).toHaveBeenCalled();
     expect(storeUndoSpy).toHaveBeenCalled();
   });
+
+  it('should render scoreboard component and call onResetScoreboard when resetScoreboard is emitted', () => {
+    const scoreboard = fixture.debugElement.query(By.css('app-scoreboard'));
+    expect(scoreboard).toBeTruthy();
+
+    const resetScoreboardSpy = vi.spyOn(component, 'onResetScoreboard');
+    const storeResetScoreboardSpy = vi.spyOn(store, 'resetScoreboard');
+
+    scoreboard.componentInstance.resetScoreboard.emit();
+    expect(resetScoreboardSpy).toHaveBeenCalled();
+    expect(storeResetScoreboardSpy).toHaveBeenCalled();
+  });
+
+  it('should display computer thinking indicator and lock board and controls when computer is thinking', () => {
+    store.updateGame({
+      id: '123',
+      board: [[null, null, null], [null, null, null], [null, null, null]],
+      currentPlayer: 'X',
+      gameMode: 'Computer',
+      status: 'InProgress',
+      winner: null,
+      winningCells: [],
+      moves: [],
+      createdAt: new Date().toISOString()
+    });
+    fixture.detectChanges();
+
+    store.setComputerThinking(true);
+    fixture.detectChanges();
+
+    const thinkingBadge = fixture.debugElement.query(By.css('.status-badge.thinking'));
+    expect(thinkingBadge).toBeTruthy();
+    expect(thinkingBadge.nativeElement.textContent).toContain('Computer is thinking...');
+
+    const board = fixture.debugElement.query(By.css('app-board'));
+    expect(board.componentInstance.disabled()).toBe(true);
+
+    const controls = fixture.debugElement.query(By.css('app-game-controls'));
+    expect(controls.componentInstance.disabled()).toBe(true);
+
+    // Reset thinking state
+    store.setComputerThinking(false);
+    fixture.detectChanges();
+
+    const normalBadge = fixture.debugElement.query(By.css('.status-badge.thinking'));
+    expect(normalBadge).toBeNull();
+    expect(board.componentInstance.disabled()).toBe(false);
+    expect(controls.componentInstance.disabled()).toBe(false);
+  });
 });
