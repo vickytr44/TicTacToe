@@ -1,0 +1,55 @@
+<div class="game-page-container">
+  <app-error-banner
+    [error]="store.error()"
+    (dismissed)="store.clearError()"
+  />
+
+  <section class="game-mode-section">
+    <app-game-mode-selector
+      [selectedMode]="store.gameMode()"
+      [disabled]="store.isPending() || store.isLoading()"
+      (modeChange)="onModeChange($event)"
+    />
+  </section>
+
+  <section class="game-status-card" aria-live="polite">
+    @if (store.status() === 'Won') {
+      <div class="status-badge won" [class.winner-x]="store.winner() === 'X'" [class.winner-o]="store.winner() === 'O'">
+        <span class="status-icon">🎉</span>
+        <span class="status-text">Player {{ store.winner() }} Wins!</span>
+      </div>
+    } @else if (store.status() === 'Draw') {
+      <div class="status-badge draw">
+        <span class="status-icon">🤝</span>
+        <span class="status-text">It's a Draw!</span>
+      </div>
+    } @else {
+      <div class="status-badge turn" [class.turn-x]="store.currentPlayer() === 'X'" [class.turn-o]="store.currentPlayer() === 'O'">
+        <span class="turn-dot"></span>
+        <span class="status-text">Player {{ store.currentPlayer() }}'s Turn</span>
+      </div>
+    }
+  </section>
+
+  <section class="game-board-section">
+    <app-board
+      [board]="store.board()"
+      [winningCells]="store.winningCells()"
+      [disabled]="store.isPending() || store.isGameOver() || store.isLoading()"
+      (cellClick)="onCellClick($event)"
+    />
+  </section>
+
+  <section class="game-controls-section">
+    <app-game-controls
+      [disabled]="store.isPending() || store.isLoading()"
+      [canUndo]="store.canUndo()"
+      (reset)="onResetGame()"
+      (undo)="onUndoMove()"
+    />
+  </section>
+
+  <section class="game-history-section">
+    <app-move-history [moves]="store.moves()" />
+  </section>
+</div>

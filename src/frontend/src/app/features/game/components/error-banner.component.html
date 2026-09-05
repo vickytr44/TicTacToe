@@ -1,0 +1,20 @@
+@if (error(); as err) {
+  <div class="error-banner" role="alert" aria-live="assertive">
+    <div class="error-content">
+      <svg class="error-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <span class="error-text">{{ err }}</span>
+    </div>
+    <button
+      type="button"
+      class="close-button"
+      aria-label="Dismiss error"
+      (click)="onDismiss()"
+    >
+      &times;
+    </button>
+  </div>
+}

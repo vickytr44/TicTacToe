@@ -1,0 +1,25 @@
+<div class="game-controls-container" role="toolbar" aria-label="Game controls">
+  <button
+    id="undo-btn"
+    type="button"
+    class="control-btn undo-btn"
+    [disabled]="disabled() || !canUndo()"
+    (click)="onUndo()"
+    aria-label="Undo last move"
+  >
+    <span class="btn-icon" aria-hidden="true">↩️</span>
+    <span class="btn-text">Undo Move</span>
+  </button>
+
+  <button
+    id="reset-game-btn"
+    type="button"
+    class="control-btn reset-btn"
+    [disabled]="disabled()"
+    (click)="onReset()"
+    aria-label="Reset current game"
+  >
+    <span class="btn-icon" aria-hidden="true">🔄</span>
+    <span class="btn-text">Reset Game</span>
+  </button>
+</div>

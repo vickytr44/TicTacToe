@@ -1,0 +1,14 @@
+<button
+  type="button"
+  class="cell-button"
+  [class.cell-x]="mark() === 'X'"
+  [class.cell-o]="mark() === 'O'"
+  [class.cell-winning]="isWinning()"
+  [disabled]="disabled() || mark() !== null"
+  [attr.aria-label]="ariaLabel()"
+  (click)="onClick()"
+>
+  @if (mark(); as m) {
+    <span class="mark" [class.mark-pop]="true">{{ m }}</span>
+  }
+</button>

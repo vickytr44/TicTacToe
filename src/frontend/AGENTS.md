@@ -51,6 +51,13 @@ src/app/
 - Synchronize local signal state immediately with backend REST API responses.
 - Implement clear loading, error, and optimistic state feedback for user actions.
 
+### 5. File Separation Standard (Mandatory: .ts, .html, .css)
+- **Three-File Component Pattern**: Every Angular component MUST be structured into three separate dedicated files for maximum readability and maintainability:
+  1. `<name>.component.ts`: TypeScript class, component decorator using `templateUrl` and `styleUrl`, signal inputs (`input()`), outputs (`output()`), and injected services/stores.
+  2. `<name>.component.html`: Pure HTML template with native control flow (`@if`, `@for`, `@switch`).
+  3. `<name>.component.css`: Component-scoped Vanilla CSS styles referencing tokens from `tokens.css`.
+- **No Inline Templates or Styles**: Never use inline `template: \`...\`` or `styles: [\`...\`]` in component metadata.
+
 ---
 
 ## Design System & Styling

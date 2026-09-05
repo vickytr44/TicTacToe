@@ -1,0 +1,35 @@
+<div
+  class="mode-selector-container"
+  role="radiogroup"
+  aria-label="Game mode selection"
+>
+  <button
+    id="mode-twoplayer-btn"
+    type="button"
+    class="mode-btn"
+    [class.active]="selectedMode() === 'TwoPlayer'"
+    [disabled]="disabled()"
+    (click)="selectMode('TwoPlayer')"
+    role="radio"
+    [attr.aria-checked]="selectedMode() === 'TwoPlayer'"
+    aria-label="Two-Player mode"
+  >
+    <span class="mode-icon" aria-hidden="true">👥</span>
+    <span class="mode-text">Two-Player</span>
+  </button>
+
+  <button
+    id="mode-computer-btn"
+    type="button"
+    class="mode-btn"
+    [class.active]="selectedMode() === 'Computer'"
+    [disabled]="disabled()"
+    (click)="selectMode('Computer')"
+    role="radio"
+    [attr.aria-checked]="selectedMode() === 'Computer'"
+    aria-label="Play Against Computer mode"
+  >
+    <span class="mode-icon" aria-hidden="true">🤖</span>
+    <span class="mode-text">vs Computer</span>
+  </button>
+</div>

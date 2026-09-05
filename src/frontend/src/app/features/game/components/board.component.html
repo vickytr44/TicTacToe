@@ -1,0 +1,26 @@
+<div class="board-container">
+  <div class="board-grid" role="grid" aria-label="Tic-Tac-Toe Game Board">
+    @for (row of [1, 2, 3]; track row; let rIdx = $index) {
+      <div class="board-row" role="row">
+        @for (col of [1, 2, 3]; track col; let cIdx = $index) {
+          <div
+            class="cell"
+            [class.winning]="isCellWinning(row, col)"
+            [attr.data-row]="row"
+            [attr.data-col]="col"
+            role="gridcell"
+            (click)="onCellClick(row, col)"
+          >
+            <app-cell
+              [mark]="getCellMark(rIdx, cIdx)"
+              [row]="row"
+              [col]="col"
+              [isWinning]="isCellWinning(row, col)"
+              [disabled]="disabled()"
+            />
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
