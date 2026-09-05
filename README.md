@@ -72,14 +72,14 @@ A modern, full-stack Tic-Tac-Toe application built with an **ASP.NET Core Clean 
 
 ### Running Tests (TDD & E2E)
 ```bash
-# Run backend tests
-dotnet test tests/backend/
+# Run all backend unit and integration tests
+dotnet test
 
-# Run frontend unit/component tests
+# Run frontend unit and component tests
 cd src/frontend && npm test
 
 # Run Playwright end-to-end tests
-npx playwright test
+cd tests/e2e && npx playwright test
 ```
 
 ### Playwright MCP Integration

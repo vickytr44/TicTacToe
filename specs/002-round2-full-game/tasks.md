@@ -4,11 +4,11 @@
 
 **Purpose**: Project initialization and basic structure.
 
-- [ ] T001 Create backend Clean Architecture projects (Domain, Application, Infrastructure, Api) and solution file
-- [ ] T002 Initialize Angular standalone project in `src/frontend`
-- [ ] T003 Configure SQLite and EF Core dependencies in Infrastructure/Api projects
-- [ ] T004 [P] Configure Playwright E2E testing framework in `tests/e2e/`
-- [ ] T005 [P] Configure xUnit test projects for backend (`tests/backend/`)
+- [X] T001 Create backend Clean Architecture projects (Domain, Application, Infrastructure, Api) and solution file
+- [X] T002 Initialize Angular standalone project in `src/frontend`
+- [X] T003 Configure SQLite and EF Core dependencies in Infrastructure/Api projects
+- [X] T004 [P] Configure Playwright E2E testing framework in `tests/e2e/`
+- [X] T005 [P] Configure xUnit test projects for backend (`tests/backend/`)
 
 ---
 

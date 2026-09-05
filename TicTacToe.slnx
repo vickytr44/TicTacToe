@@ -1,0 +1,24 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/backend/" />
+  <Folder Name="/src/backend/Api/">
+    <Project Path="src/backend/Api/TicTacToe.Api.csproj" />
+  </Folder>
+  <Folder Name="/src/backend/Application/">
+    <Project Path="src/backend/Application/TicTacToe.Application.csproj" />
+  </Folder>
+  <Folder Name="/src/backend/Domain/">
+    <Project Path="src/backend/Domain/TicTacToe.Domain.csproj" />
+  </Folder>
+  <Folder Name="/src/backend/Infrastructure/">
+    <Project Path="src/backend/Infrastructure/TicTacToe.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/" />
+  <Folder Name="/tests/backend/" />
+  <Folder Name="/tests/backend/Api.IntegrationTests/">
+    <Project Path="tests/backend/Api.IntegrationTests/TicTacToe.Api.IntegrationTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/backend/Domain.UnitTests/">
+    <Project Path="tests/backend/Domain.UnitTests/TicTacToe.Domain.UnitTests.csproj" />
+  </Folder>
+</Solution>
