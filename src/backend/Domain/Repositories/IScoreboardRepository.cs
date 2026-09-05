@@ -1,4 +1,4 @@
-namespace TicTacToe.Application.Repositories;
+namespace TicTacToe.Domain.Repositories;
 
 using TicTacToe.Domain.Entities;
 

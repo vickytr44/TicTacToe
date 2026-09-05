@@ -1,8 +1,8 @@
 namespace TicTacToe.Infrastructure.Repositories;
 
 using Microsoft.EntityFrameworkCore;
-using TicTacToe.Application.Repositories;
 using TicTacToe.Domain.Entities;
+using TicTacToe.Domain.Repositories;
 using TicTacToe.Infrastructure.Data;
 
 public class ScoreboardRepository(TicTacToeDbContext context) : IScoreboardRepository

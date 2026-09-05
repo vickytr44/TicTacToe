@@ -3,7 +3,7 @@ namespace TicTacToe.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using TicTacToe.Application.Repositories;
+using TicTacToe.Domain.Repositories;
 using TicTacToe.Infrastructure.Data;
 using TicTacToe.Infrastructure.Repositories;
 

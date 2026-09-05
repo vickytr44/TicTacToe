@@ -2,10 +2,10 @@ namespace TicTacToe.Api.Endpoints;
 
 using Microsoft.AspNetCore.Mvc;
 using TicTacToe.Application.DTOs;
-using TicTacToe.Application.Repositories;
 using TicTacToe.Domain.Entities;
 using TicTacToe.Domain.Enums;
 using TicTacToe.Domain.Exceptions;
+using TicTacToe.Domain.Repositories;
 using TicTacToe.Domain.ValueObjects;
 
 public static class GameEndpoints
