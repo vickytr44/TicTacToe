@@ -80,4 +80,28 @@ describe('GamePageComponent', () => {
     const board = fixture.debugElement.query(By.css('app-board'));
     expect(board.componentInstance.disabled()).toBe(true);
   });
+
+  it('should render game controls and call onResetGame when reset is clicked', () => {
+    const controls = fixture.debugElement.query(By.css('app-game-controls'));
+    expect(controls).toBeTruthy();
+
+    const resetSpy = vi.spyOn(component, 'onResetGame');
+    const storeResetSpy = vi.spyOn(store, 'resetGame');
+
+    controls.componentInstance.reset.emit();
+    expect(resetSpy).toHaveBeenCalled();
+    expect(storeResetSpy).toHaveBeenCalled();
+  });
+
+  it('should render mode selector and call onModeChange when mode is changed', () => {
+    const selector = fixture.debugElement.query(By.css('app-game-mode-selector'));
+    expect(selector).toBeTruthy();
+
+    const modeChangeSpy = vi.spyOn(component, 'onModeChange');
+    const storeSwitchSpy = vi.spyOn(store, 'switchMode');
+
+    selector.componentInstance.modeChange.emit('Computer');
+    expect(modeChangeSpy).toHaveBeenCalledWith('Computer');
+    expect(storeSwitchSpy).toHaveBeenCalledWith('Computer');
+  });
 });

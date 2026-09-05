@@ -60,12 +60,24 @@ A modern, full-stack Tic-Tac-Toe application built with an **ASP.NET Core Clean 
 
 ---
 
+## Implemented API Endpoints & Features
+* `POST /api/games`: Create a new game session (`TwoPlayer` or `Computer` mode).
+* `GET /api/games/{id}`: Fetch current game state.
+* `POST /api/games/{id}/moves`: Submit player move with validation and win/draw detection.
+* `POST /api/games/{id}/reset`: Reset the active game board while preserving session scoreboard and game mode.
+* **UI Features**:
+  * Reactive interactive 3×3 grid with hover and turn indicators.
+  * Turn badge and winning/draw banner with micro-animations.
+  * Dismissible inline error banner for network/validation errors.
+  * `GameControlsComponent`: Reset game control button with cyber-dark styling.
+  * `GameModeSelectorComponent`: Interactive segmented toggle between Two-Player and vs Computer modes.
+
+---
+
 ## Subsystem Documentation
 * **Global Rules & Standards**: [AGENTS.md](AGENTS.md)
 * **Backend Guidelines**: [src/backend/AGENTS.md](src/backend/AGENTS.md)
 * **Frontend Guidelines**: [src/frontend/AGENTS.md](src/frontend/AGENTS.md)
-
----
 
 ## Getting Started
 
@@ -73,6 +85,15 @@ A modern, full-stack Tic-Tac-Toe application built with an **ASP.NET Core Clean 
 * [.NET 10 SDK](https://dotnet.microsoft.com/)
 * [Node.js](https://nodejs.org/) (LTS) & npm
 * Angular CLI (`npm install -g @angular/cli`)
+
+### Running the Application
+Launch both frontend and backend concurrently with:
+```cmd
+run.bat
+```
+This automatically launches:
+* **Backend API**: `http://localhost:5000` (.NET 10 Web API)
+* **Frontend Web App**: `http://localhost:4200` (Angular Dev Server)
 
 ### Running Tests (TDD & E2E)
 ```bash

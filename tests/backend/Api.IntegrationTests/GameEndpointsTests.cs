@@ -3,6 +3,7 @@ namespace TicTacToe.Api.IntegrationTests;
 using System.Net;
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
 using TicTacToe.Application.DTOs;
 
 public class GameEndpointsTests(WebApplicationFactory<Program> factory) : IClassFixture<WebApplicationFactory<Program>>
@@ -27,6 +28,28 @@ public class GameEndpointsTests(WebApplicationFactory<Program> factory) : IClass
         Assert.Empty(game.Moves);
         Assert.Equal(3, game.Board.Length);
         Assert.Equal(3, game.Board[0].Length);
+    }
+
+    [Fact]
+    public async Task PostGame_ComputerMode_PersistsAndReturnsComputerGameMode()
+    {
+        var response = await _client.PostAsJsonAsync("/api/games", new CreateGameRequest { Mode = "Computer" });
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+
+        var created = await response.Content.ReadFromJsonAsync<GameResponse>();
+        Assert.NotNull(created);
+        Assert.Equal("Computer", created.GameMode);
+        Assert.Equal("X", created.CurrentPlayer);
+        Assert.Equal("InProgress", created.Status);
+
+        // Fetch from database to verify persistence
+        var getResponse = await _client.GetAsync($"/api/games/{created.Id}");
+        Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
+
+        var fetched = await getResponse.Content.ReadFromJsonAsync<GameResponse>();
+        Assert.NotNull(fetched);
+        Assert.Equal("Computer", fetched.GameMode);
+        Assert.Equal(created.Id, fetched.Id);
     }
 
     [Fact]
@@ -171,5 +194,78 @@ public class GameEndpointsTests(WebApplicationFactory<Program> factory) : IClass
         // Subsequent move must be rejected
         var afterDrawResponse = await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "O", Row = 1, Column = 1 });
         Assert.Equal(HttpStatusCode.BadRequest, afterDrawResponse.StatusCode);
+    }
+
+    [Fact]
+    public async Task PostReset_CompletedGame_Returns200Ok_ResetsBoard_AndPreservesScoreboard()
+    {
+        var createResponse = await _client.PostAsJsonAsync("/api/games", new CreateGameRequest { Mode = "TwoPlayer" });
+        var created = await createResponse.Content.ReadFromJsonAsync<GameResponse>();
+        Assert.NotNull(created);
+
+        // Play moves for X to win
+        await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "X", Row = 1, Column = 1 });
+        await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "O", Row = 2, Column = 1 });
+        await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "X", Row = 1, Column = 2 });
+        await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "O", Row = 2, Column = 2 });
+        var winResponse = await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "X", Row = 1, Column = 3 });
+        Assert.Equal(HttpStatusCode.OK, winResponse.StatusCode);
+
+        // Verify scoreboard recorded the win
+        using var scopeBefore = factory.Services.CreateScope();
+        var scoreboardRepo = scopeBefore.ServiceProvider.GetRequiredService<TicTacToe.Domain.Repositories.IScoreboardRepository>();
+        var scoreboardBefore = await scoreboardRepo.GetScoreboardAsync();
+        var xWinsBefore = scoreboardBefore.XWins;
+        Assert.True(xWinsBefore >= 1);
+
+        // Reset the completed game
+        var resetResponse = await _client.PostAsync($"/api/games/{created.Id}/reset", null);
+        Assert.Equal(HttpStatusCode.OK, resetResponse.StatusCode);
+
+        var resetGame = await resetResponse.Content.ReadFromJsonAsync<GameResponse>();
+        Assert.NotNull(resetGame);
+        Assert.Equal(created.Id, resetGame.Id);
+        Assert.Equal("X", resetGame.CurrentPlayer);
+        Assert.Equal("InProgress", resetGame.Status);
+        Assert.Null(resetGame.Winner);
+        Assert.Empty(resetGame.WinningCells);
+        Assert.Empty(resetGame.Moves);
+        Assert.Equal("TwoPlayer", resetGame.GameMode);
+        Assert.All(resetGame.Board, row => Assert.All(row, Assert.Null));
+
+        // Scoreboard must be preserved across game resets
+        using var scopeAfter = factory.Services.CreateScope();
+        var scoreboardRepoAfter = scopeAfter.ServiceProvider.GetRequiredService<TicTacToe.Domain.Repositories.IScoreboardRepository>();
+        var scoreboardAfter = await scoreboardRepoAfter.GetScoreboardAsync();
+        Assert.Equal(xWinsBefore, scoreboardAfter.XWins);
+    }
+
+    [Fact]
+    public async Task PostReset_NonExistentGame_Returns404NotFound()
+    {
+        var response = await _client.PostAsync($"/api/games/{Guid.NewGuid()}/reset", null);
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task PostReset_InProgressGame_Returns200Ok_AndClearsMoves()
+    {
+        var createResponse = await _client.PostAsJsonAsync("/api/games", new CreateGameRequest { Mode = "TwoPlayer" });
+        var created = await createResponse.Content.ReadFromJsonAsync<GameResponse>();
+        Assert.NotNull(created);
+
+        // Make one move
+        await _client.PostAsJsonAsync($"/api/games/{created.Id}/moves", new MakeMoveRequest { Player = "X", Row = 2, Column = 2 });
+
+        // Reset in-progress game
+        var resetResponse = await _client.PostAsync($"/api/games/{created.Id}/reset", null);
+        Assert.Equal(HttpStatusCode.OK, resetResponse.StatusCode);
+
+        var resetGame = await resetResponse.Content.ReadFromJsonAsync<GameResponse>();
+        Assert.NotNull(resetGame);
+        Assert.Equal("X", resetGame.CurrentPlayer);
+        Assert.Equal("InProgress", resetGame.Status);
+        Assert.Empty(resetGame.Moves);
+        Assert.All(resetGame.Board, row => Assert.All(row, Assert.Null));
     }
 }

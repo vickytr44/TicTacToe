@@ -3,17 +3,34 @@ import { CommonModule } from '@angular/common';
 import { GameStore } from '../state/game.store';
 import { BoardComponent } from '../components/board.component';
 import { ErrorBannerComponent } from '../components/error-banner.component';
+import { GameControlsComponent } from '../components/game-controls.component';
+import { GameModeSelectorComponent } from '../components/game-mode-selector.component';
+import { GameMode } from '../../../core/models/game.models';
 
 @Component({
   selector: 'app-game-page',
   standalone: true,
-  imports: [CommonModule, BoardComponent, ErrorBannerComponent],
+  imports: [
+    CommonModule,
+    BoardComponent,
+    ErrorBannerComponent,
+    GameControlsComponent,
+    GameModeSelectorComponent
+  ],
   template: `
     <div class="game-page-container">
       <app-error-banner
         [error]="store.error()"
         (dismissed)="store.clearError()"
       />
+
+      <section class="game-mode-section">
+        <app-game-mode-selector
+          [selectedMode]="store.gameMode()"
+          [disabled]="store.isPending() || store.isLoading()"
+          (modeChange)="onModeChange($event)"
+        />
+      </section>
 
       <section class="game-status-card" aria-live="polite">
         @if (store.status() === 'Won') {
@@ -42,6 +59,13 @@ import { ErrorBannerComponent } from '../components/error-banner.component';
           (cellClick)="onCellClick($event)"
         />
       </section>
+
+      <section class="game-controls-section">
+        <app-game-controls
+          [disabled]="store.isPending() || store.isLoading()"
+          (reset)="onResetGame()"
+        />
+      </section>
     </div>
   `,
   styles: [`
@@ -49,6 +73,12 @@ import { ErrorBannerComponent } from '../components/error-banner.component';
       display: flex;
       flex-direction: column;
       gap: var(--space-lg);
+      width: 100%;
+    }
+
+    .game-mode-section {
+      display: flex;
+      justify-content: center;
       width: 100%;
     }
 
@@ -138,5 +168,13 @@ export class GamePageComponent implements OnInit {
 
   onCellClick(position: { row: number; column: number }): void {
     this.store.makeMove(position);
+  }
+
+  onResetGame(): void {
+    this.store.resetGame();
+  }
+
+  onModeChange(mode: GameMode): void {
+    this.store.switchMode(mode);
   }
 }

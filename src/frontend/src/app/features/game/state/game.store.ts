@@ -97,6 +97,24 @@ export const GameStore = signalStore(
         )
       )
     ),
+    switchMode: rxMethod<GameMode>(
+      pipe(
+        tap(() => patchState(store, { isLoading: true, error: null })),
+        switchMap((mode) =>
+          api.createGame({ mode }).pipe(
+            tap((game) => patchState(store, { game, isLoading: false, isPending: false })),
+            catchError(() => {
+              patchState(store, {
+                isLoading: false,
+                isPending: false,
+                error: 'Something went wrong. Please try again.'
+              });
+              return of(null);
+            })
+          )
+        )
+      )
+    ),
     makeMove: rxMethod<{ row: number; column: number }>(
       pipe(
         tap(() => patchState(store, { isPending: true, error: null })),
@@ -117,6 +135,29 @@ export const GameStore = signalStore(
                   error: () => {}
                 });
               }
+            }),
+            catchError((err) => {
+              const errorMsg =
+                err?.error?.detail || err?.error?.title || 'Something went wrong. Please try again.';
+              patchState(store, { isPending: false, error: errorMsg });
+              return of(null);
+            })
+          );
+        })
+      )
+    ),
+    resetGame: rxMethod<void>(
+      pipe(
+        tap(() => patchState(store, { isPending: true, error: null })),
+        switchMap(() => {
+          const game = store.game();
+          if (!game) {
+            patchState(store, { isPending: false });
+            return of(null);
+          }
+          return api.resetGame(game.id).pipe(
+            tap((updatedGame) => {
+              patchState(store, { game: updatedGame, isPending: false, error: null });
             }),
             catchError((err) => {
               const errorMsg =

@@ -91,14 +91,14 @@
 
 ### Tests for User Story 3 ⚠️
 
-- [ ] T027 [P] [US3] Integration test for POST `/api/games/{id}/reset` including explicit assertion that the scoreboard is preserved in `tests/backend/Api.IntegrationTests/GameEndpointsTests.cs`
-- [ ] T028 [P] [US3] Component test for reset button in `tests/frontend/GameControlsComponent.spec.ts`
+- [X] T027 [P] [US3] Integration test for POST `/api/games/{id}/reset` including explicit assertion that the scoreboard is preserved in `tests/backend/Api.IntegrationTests/GameEndpointsTests.cs`
+- [X] T028 [P] [US3] Component test for reset button in `tests/frontend/GameControlsComponent.spec.ts`
 
 ### Implementation for User Story 3
 
-- [ ] T029 [US3] Implement POST `/api/games/{id}/reset` minimal API endpoint in `src/backend/Api/Endpoints/GameEndpoints.cs`
-- [ ] T030 [US3] Implement `resetGame` method in `GameStore` in `src/frontend/src/app/features/game/state/game.store.ts`
-- [ ] T031 [US3] Create `GameControlsComponent` with Reset button in `src/frontend/src/app/features/game/components/` and integrate into `GamePageComponent`
+- [X] T029 [US3] Implement POST `/api/games/{id}/reset` minimal API endpoint in `src/backend/Api/Endpoints/GameEndpoints.cs`
+- [X] T030 [US3] Implement `resetGame` method in `GameStore` in `src/frontend/src/app/features/game/state/game.store.ts`
+- [X] T031 [US3] Create `GameControlsComponent` with Reset button in `src/frontend/src/app/features/game/components/` and integrate into `GamePageComponent`
 
 ---
 
@@ -110,14 +110,14 @@
 
 ### Tests for User Story 9 ⚠️
 
-- [ ] T032 [P] [US9] Component/Integration test for mode selector verifying discard of current game, clear board/history, preserve scoreboard, and new session creation in `tests/frontend/GameModeSelectorComponent.spec.ts`
-- [ ] T032a [P] [US9] Integration test for POST `/api/games` verifying `GameMode` is correctly persisted and returned in the response in `tests/backend/Api.IntegrationTests/GameEndpointsTests.cs`
+- [X] T032 [P] [US9] Component/Integration test for mode selector verifying discard of current game, clear board/history, preserve scoreboard, and new session creation in `tests/frontend/GameModeSelectorComponent.spec.ts`
+- [X] T032a [P] [US9] Integration test for POST `/api/games` verifying `GameMode` is correctly persisted and returned in the response in `tests/backend/Api.IntegrationTests/GameEndpointsTests.cs`
 
 ### Implementation for User Story 9
 
-- [ ] T033 [US9] Update POST `/api/games` to accept and set GameMode.
-- [ ] T034 [US9] Create `GameModeSelectorComponent` in `src/frontend/src/app/features/game/components/`
-- [ ] T035 [US9] Integrate mode switching into `GameStore` and `GamePageComponent` to start new game on mode change.
+- [X] T033 [US9] Update POST `/api/games` to accept and set GameMode.
+- [X] T034 [US9] Create `GameModeSelectorComponent` in `src/frontend/src/app/features/game/components/`
+- [X] T035 [US9] Integrate mode switching into `GameStore` and `GamePageComponent` to start new game on mode change.
 
 ---
 

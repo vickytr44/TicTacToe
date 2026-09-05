@@ -30,5 +30,11 @@ public static class GameEndpoints
             var game = await gameService.MakeMoveAsync(id, request);
             return Results.Ok(game);
         });
+
+        group.MapPost("/{id:guid}/reset", async (Guid id, IGameService gameService) =>
+        {
+            var game = await gameService.ResetGameAsync(id);
+            return Results.Ok(game);
+        });
     }
 }

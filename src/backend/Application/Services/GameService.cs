@@ -72,4 +72,18 @@ public class GameService(
 
         return game.ToDto();
     }
+
+    public async Task<GameResponse> ResetGameAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var game = await gameRepository.GetByIdAsync(id, cancellationToken);
+        if (game == null)
+        {
+            throw new GameNotFoundException(id);
+        }
+
+        game.Reset();
+        await gameRepository.UpdateAsync(game, cancellationToken);
+
+        return game.ToDto();
+    }
 }
