@@ -17,13 +17,14 @@ Domain (Core) ──◄── Application ──◄── Infrastructure & Api
 ```
 
 ### 1. Domain Layer (`src/backend/Domain/`)
-- **Role**: Enterprise business logic, entities, value objects, domain events, enums, and pure business state machines.
+- **Role**: Enterprise business logic, entities, value objects, domain events, enums, pure business state machines, and **repository interfaces**.
 - **Dependencies**: **Zero external dependencies** — no third-party libraries, no EF Core, no ASP.NET Core references.
 - **Authority**: All core business rules and state machines reside exclusively here.
+- **Repository Contracts**: All aggregate repository interfaces (`IGameRepository`, `IScoreboardRepository`) **must reside in Domain** under `src/backend/Domain/Repositories/`.
 - **Purity**: Favor pure domain functions and immutable state transitions.
 
 ### 2. Application Layer (`src/backend/Application/`)
-- **Role**: Use case orchestration, service contracts, repository interfaces, and DTOs.
+- **Role**: Use case orchestration, service contracts, workflow handlers, and DTOs.
 - **Dependencies**: Depends **only on Domain**.
 - **DTO Standards**:
   - Always use `sealed record` for request and response DTOs (enforces immutability and value equality).
@@ -34,15 +35,17 @@ Domain (Core) ──◄── Application ──◄── Infrastructure & Api
   - Never expose Domain entities directly in API request or response models.
 
 ### 3. Infrastructure Layer (`src/backend/Infrastructure/`)
-- **Role**: Data persistence, repository implementations, database contexts, external service integrations.
-- **Dependencies**: Implements interfaces defined in `Application`; depends on `Application` and `Domain`.
+- **Role**: Data persistence, repository implementations (`GameRepository`, `ScoreboardRepository`), database contexts (`TicTacToeDbContext`), external service integrations.
+- **Dependencies**: Implements repository interfaces defined in `Domain`; depends on `Domain` and `Application`.
+- **Repository Implementations**: Concrete repository implementations **must reside in Infrastructure** under `src/backend/Infrastructure/Repositories/`. They encapsulate EF Core / `DbContext` queries and persistence.
 - **Database Engine**: **SQLite** via EF Core (`Microsoft.EntityFrameworkCore.Sqlite`).
   - Configure `DbContext` with SQLite connection string (e.g., `Data Source=tictactoe.db`).
   - Encapsulates database migrations, entity type configurations, and I/O-bound operations.
 
 ### 4. Api Layer (`src/backend/Api/`)
 - **Role**: ASP.NET Core host, controllers/endpoints, middleware, OpenAPI/Swagger, CORS configuration.
-- **Dependencies**: Depends on `Application` (and references `Infrastructure` via Dependency Injection wiring in `Program.cs`).
+- **Dependencies**: Depends on `Domain` (entities, repository contracts), `Application` (DTOs, services), and wires `Infrastructure` implementations via Dependency Injection in `Program.cs`.
+- **No Direct DbContext**: **Never inject `DbContext` directly into endpoints or controllers**. Always inject repository interfaces (`IGameRepository`, `IScoreboardRepository`) via primary constructors.
 - **Endpoint Design**:
   - Maintain consistent HTTP semantics (proper status codes, REST conventions).
   - Centralize error handling via global exception handling middleware or Problem Details (`RFC 7807`).

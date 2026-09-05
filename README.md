@@ -43,6 +43,7 @@ A modern, full-stack Tic-Tac-Toe application built with an **ASP.NET Core Clean 
 
 ### Backend (.NET 10)
 * **Clean Architecture**: Inward dependency flow (`Domain` ➔ `Application` ➔ `Infrastructure` & `Api`).
+* **Repository Pattern**: Persistence interfaces reside in `Domain/Repositories/` (e.g., `IGameRepository`, `IScoreboardRepository`), while concrete implementations reside in `Infrastructure/Repositories/`. API endpoints and controllers inject repository interfaces—never `DbContext` directly.
 * **State Authority**: The backend is the single source of truth for board state, move validation, win/draw detection, and session persistence.
 * **Primary Constructors**: Always use C# primary constructors for classes, services, repositories, and dependency injection.
 * **DTO Standards**: Immutable `sealed record` types with `DateTimeOffset` timestamps and string-serialized enums.

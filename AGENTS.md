@@ -13,9 +13,9 @@ This repository contains a full-stack web application consisting of:
 ```
 ├── src/
 │   ├── backend/             # ASP.NET Core Clean Architecture (.NET 10) -> see src/backend/AGENTS.md
-│   │   ├── Domain/          # Enterprise business logic, entities, value objects (zero external deps)
-│   │   ├── Application/     # Use cases, interfaces, DTOs, business workflows
-│   │   ├── Infrastructure/  # Repositories, SQLite EF Core persistence, external adapters
+│   │   ├── Domain/          # Enterprise business logic, entities, repository interfaces (zero external deps)
+│   │   ├── Application/     # Use cases, sealed record DTOs, business workflows
+│   │   ├── Infrastructure/  # Repository implementations, SQLite EF Core persistence
 │   │   └── Api/             # ASP.NET Core Web API, endpoints, middleware, Swagger
 │   └── frontend/            # Angular Standalone SPA -> see src/frontend/AGENTS.md
 │       └── src/app/
@@ -65,6 +65,11 @@ Detailed guidelines and architectural rules are scoped per subsystem and loaded 
 - **Testability**: Isolate side effects, favor pure domain functions, and design for test doubles via dependency injection.
 - **Maintainability**: Keep methods and components small and cohesive; avoid tightly coupled classes.
 - **Readability**: Use clear, ubiquitous domain language and self-documenting code over obscure tricks.
+
+### 5. Repository Pattern & Clean Architecture
+- **Repository Contracts in Domain**: Aggregate repository interfaces (`IGameRepository`, `IScoreboardRepository`) must always reside in the Domain layer (`src/backend/Domain/Repositories/`).
+- **Implementations in Infrastructure**: Concrete repository implementations reside in Infrastructure (`src/backend/Infrastructure/Repositories/`).
+- **Zero DbContext in Endpoints**: Minimal API endpoints and controllers must never inject `DbContext` directly; always inject repository interfaces via primary constructors.
 
 ---
 
