@@ -79,6 +79,20 @@ The project was developed following:
 
 ---
 
+### Quick Start (Run Full-Stack with a Single Command)
+
+On Windows, you can start both the backend and frontend concurrently in separate windows with a single command from the project root:
+
+```cmd
+run.bat
+```
+
+This script will automatically:
+1. Launch the **ASP.NET Core Web API** (`http://localhost:5000`, Swagger: `http://localhost:5000/swagger`).
+2. Launch the **Angular Standalone SPA** (`http://localhost:4200`).
+
+---
+
 ## 4. How to Run Backend
 
 ### Prerequisites
@@ -122,11 +136,7 @@ The project was developed following:
    ```
 4. Open your browser and navigate to `http://localhost:4200`.
 
-### Quick Launch (Concurrent Full-Stack)
-On Windows, you can launch both backend and frontend simultaneously with a single command from the project root:
-```cmd
-run.bat
-```
+*(Alternatively, use [run.bat](file:///c:/Users/vicky/.gemini/antigravity/scratch/TicTakToe/run.bat) from the project root to run both backend and frontend together).*
 
 ---
 
