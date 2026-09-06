@@ -10,16 +10,15 @@ This guide provides runnable validation scenarios to prove the feature works end
 ## Prerequisites
 
 1. Ensure the .NET 10 SDK and Node.js are installed.
-2. The SQLite database should be created and migrations applied.
-3. Both the ASP.NET Core backend and Angular frontend development servers must be running.
+2. Both the ASP.NET Core backend and Angular frontend development servers must be running.
 
 ### Setup Commands (To run after implementation)
 ```bash
-# Apply EF Core migrations
-dotnet ef database update --project src/backend/Infrastructure --startup-project src/backend/Api
-
-# Start Backend (runs on https://localhost:5001 or http://localhost:5000)
+# Start Backend (runs on http://localhost:5000; applies SQLite migrations automatically on startup via Database.Migrate())
 dotnet run --project src/backend/Api
+
+# (Optional) Manually apply EF Core migrations outside startup:
+# dotnet ef database update --project src/backend/Infrastructure --startup-project src/backend/Api
 
 # Start Frontend (runs on http://localhost:4200)
 cd src/frontend

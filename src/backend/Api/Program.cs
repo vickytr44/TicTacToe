@@ -24,11 +24,11 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Ensure database is created
+// Ensure database is created and migrations are applied
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<TicTacToeDbContext>();
-    db.Database.EnsureCreated();
+    db.Database.Migrate();
 }
 
 // Middleware

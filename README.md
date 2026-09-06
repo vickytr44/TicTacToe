@@ -112,7 +112,7 @@ This script will automatically:
    - HTTPS: `https://localhost:5001`
    - Swagger / OpenAPI UI: `http://localhost:5000/swagger`
 
-*Note: Database creation and EF Core migrations run automatically on startup via `EnsureCreated()` / migration initialization.*
+*Note: SQLite database creation and EF Core migrations run automatically on startup via `Database.Migrate()`.*
 
 ---
 
