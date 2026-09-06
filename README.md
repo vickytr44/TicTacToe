@@ -277,6 +277,7 @@ This project was engineered using the **Google Antigravity AI Agent** leveraging
    - Two-Player mode is pass-and-play on the same machine. Networked multiplayer over WebSockets / SignalR is not included in the current scope.
 4. **Session-Scoped Scoreboard**:
    - Scoreboard data is stored in the local SQLite database for the session; it does not require user authentication or cloud profile sync.
+   - `ScoreboardService` is registered with a `Scoped` service lifetime to safely inject the EF Core SQLite `IScoreboardRepository`, adhering to Clean Architecture dependency rules without captive dependencies.
 
 ---
 

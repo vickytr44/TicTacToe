@@ -79,10 +79,10 @@
 
 ## 5. Session & Scoreboard Management
 
-### Decision: In-Memory Singleton Scoreboard, Game Sessions via Repository
-- **Rationale**: The spec states single-session scope. The scoreboard is a singleton aggregate (X wins, O wins, draws) that persists across game resets but not across server restarts. Game sessions are created/retrieved via a repository backed by SQLite (or in-memory store).
+### Decision: Scoped ScoreboardService with SQLite Persistence via Repository
+- **Rationale**: While the spec requires session-scoped scoreboard counts that persist across game resets, implementing `ScoreboardService` with `Scoped` lifetime injecting `IScoreboardRepository` backed by SQLite EF Core ensures proper dependency inversion without creating captive dependencies (avoiding injecting a scoped `DbContext`/repository into a singleton).
 - **Alternatives considered**:
-  - **Scoreboard persisted in SQLite**: Possible but spec says in-memory is acceptable. We use SQLite for game state to demonstrate the pattern, and a simple in-memory or SQLite-backed scoreboard.
+  - **In-Memory Singleton Scoreboard**: Evaluated during early design, but rejected in favor of repository-backed SQLite persistence to keep architecture consistent across all aggregates and avoid DI captive dependency issues.
 
 ---
 

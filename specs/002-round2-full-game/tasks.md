@@ -170,7 +170,7 @@
 
 ### Implementation for User Story 6
 
-- [X] T046 [US6] Implement singleton `ScoreboardService` in `src/backend/Application/Services/ScoreboardService.cs` (updating upon terminal game states).
+- [X] T046 [US6] Implement scoped `ScoreboardService` in `src/backend/Application/Services/ScoreboardService.cs` (persisted via `IScoreboardRepository` with SQLite, updating upon terminal game states).
 - [X] T047 [US6] Implement GET `/api/scoreboard` and POST `/api/scoreboard/reset` endpoints in `src/backend/Api/Endpoints/ScoreboardEndpoints.cs`
 - [X] T048 [US6] Create `ScoreboardStore` in `src/frontend/src/app/core/state/scoreboard.store.ts`
 - [X] T049 [US6] Create `ScoreboardComponent` in `src/frontend/src/app/features/game/components/`
