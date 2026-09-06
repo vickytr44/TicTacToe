@@ -69,7 +69,7 @@ The project was developed following:
    - Independent Scoreboard Reset button resetting all counts to zero without resetting active game board.
 
 7. **Error Handling & Resilience**:
-   - Backend RFC 7807 Problem Details for 400 Bad Request (occupied cells, out-of-bounds moves), 404 Not Found, and 409 Conflict.
+   - Backend RFC 7807 Problem Details for 400 Bad Request (occupied cells, out-of-bounds moves) and 404 Not Found.
    - Frontend dismissible error banner alerting users if API communication fails without desynchronizing board state.
 
 8. **Accessibility & Responsive Layout**:
