@@ -172,12 +172,13 @@ dotnet test tests/backend/Domain.UnitTests/Domain.UnitTests.csproj
 dotnet test tests/backend/Api.IntegrationTests/Api.IntegrationTests.csproj
 ```
 
-### Frontend Tests (Karma / Jasmine)
+### Frontend Tests (Angular Unit / Component)
 Run all Angular unit and component tests:
 ```cmd
 cd src/frontend
-cmd /c npm test -- --watch=false
+cmd /c npm test
 ```
+*(In PowerShell on Windows, use `npm.cmd test` or run `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` if script execution is restricted).*
 
 ### End-to-End Tests (Playwright)
 Run the Playwright E2E suite covering all user journeys, real AI strategy, and latency performance tests against the live .NET 10 backend:
