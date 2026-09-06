@@ -364,4 +364,79 @@ test.describe('Tic-Tac-Toe Full-Game E2E Flow', () => {
     await expect(page.locator('[data-row="2"][data-col="2"] .mark')).toHaveCount(0);
     await expect(page.locator('.status-text')).toContainText("Player X's Turn");
   });
+
+  test('Flow 6: Draw detection triggers draw announcement, locks board, and increments scoreboard draws', async ({ page }) => {
+    // 9-move sequence leading to a draw without 3-in-a-row:
+    // Move 1: X plays (1,1)
+    await page.locator('[data-row="1"][data-col="1"] button').click();
+    // Move 2: O plays (1,2)
+    await page.locator('[data-row="1"][data-col="2"] button').click();
+    // Move 3: X plays (1,3)
+    await page.locator('[data-row="1"][data-col="3"] button').click();
+    // Move 4: O plays (2,2)
+    await page.locator('[data-row="2"][data-col="2"] button').click();
+    // Move 5: X plays (2,1)
+    await page.locator('[data-row="2"][data-col="1"] button').click();
+    // Move 6: O plays (3,1)
+    await page.locator('[data-row="3"][data-col="1"] button').click();
+    // Move 7: X plays (2,3)
+    await page.locator('[data-row="2"][data-col="3"] button').click();
+    // Move 8: O plays (3,3)
+    await page.locator('[data-row="3"][data-col="3"] button').click();
+    // Move 9: X plays (3,2)
+    await page.locator('[data-row="3"][data-col="2"] button').click();
+
+    // Verify Draw announcement
+    await expect(page.locator('.status-badge.draw')).toBeVisible();
+    await expect(page.locator('.status-text')).toContainText("It's a Draw!");
+
+    // Verify all 9 cells are occupied
+    await expect(page.locator('.mark')).toHaveCount(9);
+
+    // Verify board is locked (all cell buttons are disabled)
+    for (let r = 1; r <= 3; r++) {
+      for (let c = 1; c <= 3; c++) {
+        await expect(page.locator(`[data-row="${r}"][data-col="${c}"] button`)).toBeDisabled();
+      }
+    }
+
+    // Verify Scoreboard draws count incremented to 1
+    const drawsScore = page.locator('.score-card.draws .score-val');
+    await expect(drawsScore).toHaveText('1');
+  });
+
+  test('Flow 7: Invalid move prevention and error banner resilience', async ({ page }) => {
+    // Move 1: X plays (1,1)
+    const cell11 = page.locator('[data-row="1"][data-col="1"] button');
+    await cell11.click();
+    await expect(page.locator('[data-row="1"][data-col="1"] .mark')).toHaveText('X');
+
+    // Verify occupied cell button is immediately disabled to prevent invalid moves
+    await expect(cell11).toBeDisabled();
+
+    // Route override to simulate backend rejecting invalid move with RFC 7807 Problem Details
+    await page.route('**/api/games/*/moves', async (route) => {
+      await route.fulfill({
+        status: 400,
+        contentType: 'application/problem+json',
+        json: {
+          title: 'Bad Request',
+          status: 400,
+          detail: 'Cell (1, 2) is already occupied.'
+        }
+      });
+    });
+
+    // Attempt to make move on (1,2) which fails on backend
+    await page.locator('[data-row="1"][data-col="2"] button').click();
+
+    // Verify error banner appears with Problem Details error text
+    const errorBanner = page.locator('.error-banner');
+    await expect(errorBanner).toBeVisible();
+    await expect(page.locator('.error-text')).toContainText('already occupied');
+
+    // Dismiss error banner
+    await page.locator('.close-button').click();
+    await expect(errorBanner).toHaveCount(0);
+  });
 });
