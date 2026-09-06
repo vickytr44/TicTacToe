@@ -180,11 +180,13 @@ cmd /c npm test -- --watch=false
 ```
 
 ### End-to-End Tests (Playwright)
-Run the Playwright E2E suite covering all user journeys and latency performance tests:
+Run the Playwright E2E suite covering all user journeys, real AI strategy, and latency performance tests against the live .NET 10 backend:
 ```cmd
 cd tests/e2e
 cmd /c npm test
 ```
+> [!NOTE]
+> Playwright's `webServer` automatically launches the ASP.NET Core backend on `http://localhost:5000` (or reuses an existing instance) and verifies real database persistence, session scoreboard updates, and heuristic AI moves with zero API interception.
 
 ---
 
