@@ -8,11 +8,11 @@
 
 ## Summary
 
-Build a full-stack Tic-Tac-Toe application with an ASP.NET Core minimal API backend using Clean Architecture (in-memory/SQLite EF Core) and an Angular 19+ standalone frontend using NgRx SignalStore. The application supports Two-Player and Computer modes, win/draw detection, move history, undo (single and pair-based depending on mode), and a session scoreboard. The backend is the single source of truth for all game state and validation.
+Build a full-stack Tic-Tac-Toe application with an ASP.NET Core minimal API backend using Clean Architecture (in-memory/SQLite EF Core) and an Angular 22 standalone frontend using NgRx SignalStore. The application supports Two-Player and Computer modes, win/draw detection, move history, undo (single and pair-based depending on mode), and a session scoreboard. The backend is the single source of truth for all game state and validation.
 
 ## Technical Context
 
-**Language/Version**: .NET 10 (C# 14), TypeScript 5.5, Angular 19+
+**Language/Version**: .NET 10 (C# 13), TypeScript 6.0, Angular 22
 
 **Primary Dependencies**: 
 - Backend: `Microsoft.EntityFrameworkCore.Sqlite`, xUnit

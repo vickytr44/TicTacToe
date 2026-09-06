@@ -64,7 +64,7 @@ Sync Impact Report
   - **Error Handling**: Global exception handling returning standard RFC 7807 Problem Details.
   - **Data Boundary**: Domain entities MUST NEVER be exposed directly in API request or response models.
 - **Frontend Architecture**:
-  - **Framework**: Angular (v19+ Standalone Components), TypeScript.
+  - **Framework**: Angular (v22 Standalone Components), TypeScript.
   - **State Management**: NgRx SignalStore (`@ngrx/signals`) and Angular Signals (`signal`, `computed`).
   - **Styling & Design System**: Vanilla CSS with custom tokens in `shared/styles/tokens.css` (no TailwindCSS).
   - **Accessibility**: Semantic HTML5 hierarchy (single `h1` per view), descriptive interactive labels, ARIA landmarks, and full keyboard navigation.

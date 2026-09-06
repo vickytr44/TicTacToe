@@ -1,6 +1,6 @@
 # Tic-Tac-Toe Full-Stack Application
 
-A modern, full-stack Tic-Tac-Toe web application built with an **ASP.NET Core Clean Architecture** (.NET 10) backend and a reactive **Angular Standalone** (v19) frontend, crafted under strict **Test-Driven Development (TDD)** and **SOLID** software craftsmanship principles.
+A modern, full-stack Tic-Tac-Toe web application built with an **ASP.NET Core Clean Architecture** (.NET 10) backend and a reactive **Angular Standalone** (v22) frontend, crafted under strict **Test-Driven Development (TDD)** and **SOLID** software craftsmanship principles.
 
 ---
 
@@ -23,7 +23,7 @@ The project was developed following:
 | **Backend Framework** | .NET 10 (`net10.0`) / C# 13 | High-performance Web API runtime with primary constructors |
 | **Architecture** | Clean Architecture | Strict layer decoupling with inward dependency rule |
 | **Database & ORM** | SQLite / EF Core 10 | Local persistence for games, moves, and session scoreboard |
-| **Frontend Framework** | Angular 19+ (Standalone) | Modern SPA with standalone components (no `NgModule`) |
+| **Frontend Framework** | Angular 22 (Standalone) | Modern SPA with standalone components (no `NgModule`) |
 | **Reactive State** | NgRx SignalStore & Angular Signals | Declarative, boilerplate-free state management and computed signals |
 | **Styling & Design** | Vanilla CSS & Custom Design Tokens | Cyber-dark glassmorphism, responsive CSS grid, zero Tailwind |
 | **Backend Testing** | xUnit, FluentAssertions, `WebApplicationFactory` | Unit tests for domain logic and integration tests for API endpoints |
@@ -197,7 +197,7 @@ This project was engineered using the **Google Antigravity AI Agent** leveraging
 1. **Hierarchical `AGENTS.md` Architecture Rules**:
    - **Root Guidelines ([`AGENTS.md`](AGENTS.md))**: Defines global architectural standards, TDD Red-Green-Refactor workflow, Backend State Authority, and repository patterns.
    - **Backend Subsystem ([`src/backend/AGENTS.md`](src/backend/AGENTS.md))**: Enforces .NET 10 Clean Architecture layer isolation, zero-dependency Domain, Application services, sealed record DTOs, and thin Minimal API endpoints.
-   - **Frontend Subsystem ([`src/frontend/AGENTS.md`](src/frontend/AGENTS.md))**: Enforces Angular 19 Standalone components, NgRx SignalStore reactive state, dedicated folder-per-component 3-file structure (`.ts`, `.html`, `.css`), and tokenized vanilla CSS.
+   - **Frontend Subsystem ([`src/frontend/AGENTS.md`](src/frontend/AGENTS.md))**: Enforces Angular 22 Standalone components, NgRx SignalStore reactive state, dedicated folder-per-component 3-file structure (`.ts`, `.html`, `.css`), and tokenized vanilla CSS.
 
 2. **Project Constitution (`speckit-constitution`)**:
    - Created and synchronized the project constitution ([`.specify/memory/constitution.md`](.specify/memory/constitution.md)) directly from the `AGENTS.md` files.
