@@ -190,23 +190,42 @@ cmd /c npm test
 
 ## 8. AI Tools and Prompt Summary
 
-This project was engineered using the **Google Antigravity AI Agent** leveraging the **SpecKit** methodology across iterative phases:
+This project was engineered using the **Google Antigravity AI Agent** leveraging **SpecKit** for spec-driven development, custom domain skills, hierarchical `AGENTS.md` guidelines, and constitutional enforcement across iterative phases:
 
-1. **Specification & Clarification (`speckit-specify`, `speckit-clarify`)**:
+1. **Hierarchical `AGENTS.md` Architecture Rules**:
+   - **Root Guidelines ([`AGENTS.md`](AGENTS.md))**: Defines global architectural standards, TDD Red-Green-Refactor workflow, Backend State Authority, and repository patterns.
+   - **Backend Subsystem ([`src/backend/AGENTS.md`](src/backend/AGENTS.md))**: Enforces .NET 10 Clean Architecture layer isolation, zero-dependency Domain, Application services, sealed record DTOs, and thin Minimal API endpoints.
+   - **Frontend Subsystem ([`src/frontend/AGENTS.md`](src/frontend/AGENTS.md))**: Enforces Angular 19 Standalone components, NgRx SignalStore reactive state, dedicated folder-per-component 3-file structure (`.ts`, `.html`, `.css`), and tokenized vanilla CSS.
+
+2. **Project Constitution (`speckit-constitution`)**:
+   - Created and synchronized the project constitution ([`.specify/memory/constitution.md`](.specify/memory/constitution.md)) directly from the `AGENTS.md` files.
+   - Formalized non-negotiable constitutional principles: TDD-first development, clean inward dependencies, backend authority of truth, standalone reactive signals, and UI accessibility, ensuring all subsequent artifacts strictly adhere to core architectural guardrails.
+
+3. **Specialized Antigravity Agent Skills**:
+   - Domain-specific workflows powered by custom skills in `.agents/skills/`:
+     - `angular-developer`: Best practices for Standalone components, Signals reactivity, and template accessibility.
+     - `dotnet-webapi`: ASP.NET Core Minimal APIs, RFC 7807 Problem Details error conventions, and OpenAPI metadata.
+     - `speckit-*` suite (`speckit-specify`, `speckit-clarify`, `speckit-plan`, `speckit-tasks`, `speckit-implement`, `speckit-constitution`, `speckit-analyze`): Spec-driven development pipeline.
+
+4. **Specification & Clarification (`speckit-specify`, `speckit-clarify`)**:
    - Synthesized natural language requirements into formal specifications (`spec.md`).
    - Clarified edge cases (e.g., move-pair undo in Computer mode, independent scoreboard reset, 1-indexed coordinates).
-2. **Architectural Planning (`speckit-plan`)**:
+
+5. **Architectural Planning (`speckit-plan`)**:
    - Structured Clean Architecture layers with inward dependency rules.
    - Designed immutable sealed record DTOs, repository contracts in Domain, and NgRx SignalStore state structure.
-3. **Task Breakdown (`speckit-tasks`)**:
+
+6. **Task Breakdown (`speckit-tasks`)**:
    - Decomposed user stories into granular, test-first tasks (`tasks.md`) following strict Red-Green-Refactor sequence.
-4. **Iterative Implementation (`speckit-implement`)**:
+
+7. **Iterative Implementation (`speckit-implement`)**:
    - **Phases 1–2**: Foundations, domain entities, SQLite EF Core repositories, and minimal API.
    - **Phases 3–6**: Two-Player gameplay loop, draw evaluation, game reset, and mode selection.
    - **Phases 7–8**: Move history tracking and single-move undo.
    - **Phases 9–10**: Session scoreboard persistence and strategic computer opponent with thinking delay.
    - **Phases 11–12**: Computer move-pair undo, Playwright E2E testing, ARIA accessibility, and documentation.
-5. **Playwright MCP Integration**:
+
+8. **Playwright MCP Integration**:
    - Leveraged the Playwright MCP server to automate browser sessions, verify click-to-render latency under 200ms, and validate UI micro-interactions.
 
 ---
