@@ -136,7 +136,7 @@ This script will automatically:
    ```
 4. Open your browser and navigate to `http://localhost:4200`.
 
-*(Alternatively, use [run.bat](file:///c:/Users/vicky/.gemini/antigravity/scratch/TicTakToe/run.bat) from the project root to run both backend and frontend together).*
+*(Alternatively, use `run.bat` from the project root to run both backend and frontend together).*
 
 ---
 
