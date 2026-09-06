@@ -186,6 +186,8 @@ Run the Playwright E2E suite covering all user journeys, real AI strategy, and l
 cd tests/e2e
 cmd /c npm test
 ```
+*(In PowerShell on Windows, use `npm.cmd test`).*
+
 > [!NOTE]
 > Playwright's `webServer` automatically launches the ASP.NET Core backend on `http://localhost:5000` (or reuses an existing instance) and verifies real database persistence, session scoreboard updates, and heuristic AI moves with zero API interception.
 
