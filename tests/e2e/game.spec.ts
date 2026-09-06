@@ -49,6 +49,26 @@ test.beforeAll(async () => {
       server!.listen(PORT, () => resolve());
     });
   }
+
+  // Warm up real backend endpoints to avoid JIT cold-start on the first latency check
+  try {
+    const warmupGame = await fetch('http://localhost:5000/api/games', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ mode: 'TwoPlayer' })
+    });
+    if (warmupGame.ok) {
+      const game = (await warmupGame.json()) as { id: string };
+      await fetch(`http://localhost:5000/api/games/${game.id}/moves`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ player: 'X', row: 1, column: 1 })
+      });
+    }
+    await fetch('http://localhost:5000/api/scoreboard/reset', { method: 'POST' });
+  } catch {
+    // webServer will ensure backend is up
+  }
 });
 
 test.afterAll(async () => {
@@ -57,161 +77,16 @@ test.afterAll(async () => {
   }
 });
 
-test.describe('Tic-Tac-Toe Full-Game E2E Flow', () => {
-  let gameState: any = null;
-  let scoreboard = { xWins: 0, oWins: 0, draws: 0 };
-
-  test.beforeEach(async ({ page }) => {
-    scoreboard = { xWins: 0, oWins: 0, draws: 0 };
-    gameState = null;
-
-    // Intercept backend API requests
-    await page.route('**/api/**', async (route, request) => {
-      const url = request.url();
-      const method = request.method();
-
-      if (url.includes('/api/scoreboard/reset') && method === 'POST') {
-        scoreboard = { xWins: 0, oWins: 0, draws: 0 };
-        return route.fulfill({ status: 200, json: scoreboard });
-      }
-
-      if (url.includes('/api/scoreboard') && method === 'GET') {
-        return route.fulfill({ status: 200, json: scoreboard });
-      }
-
-      if (url.endsWith('/api/games') && method === 'POST') {
-        const body = request.postDataJSON() || {};
-        gameState = {
-          id: 'test-game-id',
-          board: [
-            [null, null, null],
-            [null, null, null],
-            [null, null, null]
-          ],
-          currentPlayer: 'X',
-          gameMode: body.mode || 'TwoPlayer',
-          status: 'InProgress',
-          winner: null,
-          winningCells: [],
-          moves: [],
-          createdAt: new Date().toISOString()
-        };
-        return route.fulfill({ status: 201, json: gameState });
-      }
-
-      if (url.includes('/moves') && method === 'POST') {
-        const moveReq = request.postDataJSON();
-        const r = moveReq.row - 1;
-        const c = moveReq.column - 1;
-
-        gameState.board[r][c] = moveReq.player;
-        gameState.moves.push({
-          moveNumber: gameState.moves.length + 1,
-          player: moveReq.player,
-          row: moveReq.row,
-          column: moveReq.column
-        });
-
-        // Check human win
-        const lines = [
-          [[0,0],[0,1],[0,2]],
-          [[1,0],[1,1],[1,2]],
-          [[2,0],[2,1],[2,2]],
-          [[0,0],[1,0],[2,0]],
-          [[0,1],[1,1],[2,1]],
-          [[0,2],[1,2],[2,2]],
-          [[0,0],[1,1],[2,2]],
-          [[0,2],[1,1],[2,0]]
-        ];
-
-        let won = false;
-        for (const line of lines) {
-          if (line.every(([lr, lc]) => gameState.board[lr][lc] === moveReq.player)) {
-            gameState.status = 'Won';
-            gameState.winner = moveReq.player;
-            gameState.winningCells = line.map(([lr, lc]) => ({ row: lr + 1, column: lc + 1 }));
-            won = true;
-            if (moveReq.player === 'X') scoreboard.xWins++;
-            else scoreboard.oWins++;
-            break;
-          }
-        }
-
-        if (!won && gameState.moves.length === 9) {
-          gameState.status = 'Draw';
-          scoreboard.draws++;
-        } else if (!won) {
-          gameState.currentPlayer = moveReq.player === 'X' ? 'O' : 'X';
-
-          // If computer mode, apply computer move
-          if (gameState.gameMode === 'Computer' && gameState.currentPlayer === 'O') {
-            let compR = 1;
-            let compC = 1;
-            if (gameState.board[1][1] !== null) {
-              // Find first empty cell
-              for (let i = 0; i < 3; i++) {
-                for (let j = 0; j < 3; j++) {
-                  if (gameState.board[i][j] === null) {
-                    compR = i;
-                    compC = j;
-                    break;
-                  }
-                }
-              }
-            }
-
-            gameState.board[compR][compC] = 'O';
-            gameState.moves.push({
-              moveNumber: gameState.moves.length + 1,
-              player: 'O',
-              row: compR + 1,
-              column: compC + 1
-            });
-            gameState.currentPlayer = 'X';
-          }
-        }
-
-        return route.fulfill({ status: 200, json: gameState });
-      }
-
-      if (url.includes('/reset') && method === 'POST') {
-        gameState.board = [
-          [null, null, null],
-          [null, null, null],
-          [null, null, null]
-        ];
-        gameState.currentPlayer = 'X';
-        gameState.status = 'InProgress';
-        gameState.winner = null;
-        gameState.winningCells = [];
-        gameState.moves = [];
-        return route.fulfill({ status: 200, json: gameState });
-      }
-
-      if (url.includes('/undo') && method === 'POST') {
-        if (gameState.gameMode === 'Computer') {
-          // Pop O then X
-          if (gameState.moves.length >= 2) {
-            const m2 = gameState.moves.pop();
-            gameState.board[m2.row - 1][m2.column - 1] = null;
-            const m1 = gameState.moves.pop();
-            gameState.board[m1.row - 1][m1.column - 1] = null;
-          }
-          gameState.currentPlayer = 'X';
-        } else {
-          if (gameState.moves.length > 0) {
-            const m = gameState.moves.pop();
-            gameState.board[m.row - 1][m.column - 1] = null;
-            gameState.currentPlayer = m.player;
-          }
-        }
-        return route.fulfill({ status: 200, json: gameState });
-      }
-
-      return route.continue();
-    });
+test.describe('Tic-Tac-Toe Full-Game E2E Flow (Real .NET Backend)', () => {
+  test.beforeEach(async ({ page, request }) => {
+    // Reset scoreboard on real backend so each test starts with a clean baseline
+    await request.post('http://localhost:5000/api/scoreboard/reset');
 
     await page.goto('http://localhost:4200');
+
+    // Wait for the game page to load and board to be interactive
+    await expect(page.locator('.status-text')).toContainText("Player X's Turn");
+    await expect(page.locator('[data-row="1"][data-col="1"] button')).toBeEnabled();
   });
 
   test('Flow 1: Two-Player game win detection and latency performance under 200ms', async ({ page }) => {
@@ -362,6 +237,27 @@ test.describe('Tic-Tac-Toe Full-Game E2E Flow', () => {
 
     await expect(page.locator('[data-row="1"][data-col="1"] .mark')).toHaveCount(0);
     await expect(page.locator('[data-row="2"][data-col="2"] .mark')).toHaveCount(0);
+    await expect(page.locator('.status-text')).toContainText("Player X's Turn");
+  });
+
+  test('Flow 5b: Real backend ComputerStrategy executes intelligent Block priority', async ({ page }) => {
+    // Switch to vs Computer mode
+    await page.locator('#mode-computer-btn').click();
+    await expect(page.locator('#mode-computer-btn')).toHaveClass(/active/);
+
+    // Move 1: Human X plays (1,1)
+    await page.locator('[data-row="1"][data-col="1"] button').click();
+    await expect(page.locator('[data-row="1"][data-col="1"] .mark')).toHaveText('X');
+
+    // Computer takes Center (2,2) [Priority 3: Center]
+    await expect(page.locator('[data-row="2"][data-col="2"] .mark')).toHaveText('O');
+
+    // Move 2: Human X plays (1,2) -> threatens row 1 win at (1,3)!
+    await page.locator('[data-row="1"][data-col="2"] button').click();
+    await expect(page.locator('[data-row="1"][data-col="2"] .mark')).toHaveText('X');
+
+    // Computer must execute Priority 2 (Block) and play (1,3) to block X!
+    await expect(page.locator('[data-row="1"][data-col="3"] .mark')).toHaveText('O');
     await expect(page.locator('.status-text')).toContainText("Player X's Turn");
   });
 

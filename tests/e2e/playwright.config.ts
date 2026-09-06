@@ -22,4 +22,10 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
   ],
+  webServer: {
+    command: 'dotnet run --project ../../src/backend/Api --launch-profile http',
+    url: 'http://localhost:5000/api/health',
+    reuseExistingServer: true,
+    timeout: 60000,
+  },
 });
